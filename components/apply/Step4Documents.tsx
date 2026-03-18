@@ -1,7 +1,6 @@
 'use client'
 import { useState, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { supabase } from '@/lib/supabase'
 import { type ApplicationData } from '@/lib/types'
 
 interface Props {
@@ -42,16 +41,28 @@ export default function Step4Documents({ data, onChange, errors }: Props) {
 
     for (const file of files) {
       if (newNames.includes(file.name)) continue
-      const path = `statements/${Date.now()}-${file.name.replace(/\s+/g, '-')}`
-      const { error } = await supabase.storage.from('bank-statements').upload(path, file)
-      if (error) {
-        setUploadError(`Failed to upload ${file.name}. Please try again.`)
-        continue
-      }
-      const { data: signedData } = await supabase.storage.from('bank-statements').createSignedUrl(path, 3600)
-      if (signedData?.signedUrl) {
-        newUrls.push(signedData.signedUrl)
-        newNames.push(file.name)
+
+      try {
+        const form = new FormData()
+        form.append('file', file)
+
+        const res = await fetch('/api/upload-statement', { method: 'POST', body: form })
+        const json = await res.json()
+
+        if (!res.ok) {
+          const detail = json?.error ?? `HTTP ${res.status}`
+          console.error(`[upload] Failed for ${file.name}:`, json)
+          setUploadError(`Failed to upload ${file.name}: ${detail}`)
+          continue
+        }
+
+        if (json.signedUrl) {
+          newUrls.push(json.signedUrl)
+          newNames.push(file.name)
+        }
+      } catch (err) {
+        console.error(`[upload] Network error for ${file.name}:`, err)
+        setUploadError(`Failed to upload ${file.name}. Check your connection and try again.`)
       }
     }
 
