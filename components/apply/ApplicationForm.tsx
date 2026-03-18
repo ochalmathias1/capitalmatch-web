@@ -40,7 +40,7 @@ function validateStep(step: number, data: ApplicationData): Partial<Record<keyof
     if (!data.homeCity.trim()) errs.homeCity = 'City is required'
     if (!data.homeState.trim()) errs.homeState = 'State is required'
     if (!data.homeZip.trim()) errs.homeZip = 'ZIP is required'
-    if (!data.ssnLast4 || data.ssnLast4.length < 4) errs.ssnLast4 = 'Last 4 digits of SSN required'
+    if (!data.ssnFull || data.ssnFull.replace(/\D/g, '').length < 9) errs.ssnFull = 'Full SSN required (XXX-XX-XXXX)'
     if (!data.dob) errs.dob = 'Date of birth is required'
     if (!data.ficoRange) errs.ficoRange = 'Credit score range is required'
   }
@@ -53,7 +53,7 @@ function validateStep(step: number, data: ApplicationData): Partial<Record<keyof
     if (!data.secondOwnerCity.trim()) errs.secondOwnerCity = 'City is required'
     if (!data.secondOwnerState.trim()) errs.secondOwnerState = 'State is required'
     if (!data.secondOwnerZip.trim()) errs.secondOwnerZip = 'ZIP is required'
-    if (!data.secondOwnerSsnLast4 || data.secondOwnerSsnLast4.length < 4) errs.secondOwnerSsnLast4 = 'Last 4 SSN required'
+    if (!data.secondOwnerSsnFull || data.secondOwnerSsnFull.replace(/\D/g, '').length < 9) errs.secondOwnerSsnFull = 'Full SSN required (XXX-XX-XXXX)'
     if (!data.secondOwnerDob) errs.secondOwnerDob = 'Date of birth is required'
     if (!data.secondOwnerFico) errs.secondOwnerFico = 'Credit score range is required'
   }

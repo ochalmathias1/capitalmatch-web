@@ -24,7 +24,7 @@ export interface ApplicationData {
   homeCity: string
   homeState: string
   homeZip: string
-  ssnLast4: string
+  ssnFull: string
   dob: string
   ficoRange: string
 
@@ -37,7 +37,7 @@ export interface ApplicationData {
   secondOwnerCity: string
   secondOwnerState: string
   secondOwnerZip: string
-  secondOwnerSsnLast4: string
+  secondOwnerSsnFull: string
   secondOwnerDob: string
   secondOwnerFico: string
 
@@ -58,11 +58,11 @@ export const EMPTY_APPLICATION: ApplicationData = {
   dateStarted: '', entityType: '', businessEmail: '', businessDescription: '',
   monthlyRevenue: '', requestedAmount: '', useOfFunds: '',
   ownerName: '', ownerTitle: '', ownershipPct: '', homeAddress: '',
-  homeCity: '', homeState: '', homeZip: '', ssnLast4: '', dob: '', ficoRange: '',
+  homeCity: '', homeState: '', homeZip: '', ssnFull: '', dob: '', ficoRange: '',
   hasSecondOwner: false,
   secondOwnerName: '', secondOwnerTitle: '', secondOwnerPct: '',
   secondOwnerAddress: '', secondOwnerCity: '', secondOwnerState: '',
-  secondOwnerZip: '', secondOwnerSsnLast4: '', secondOwnerDob: '', secondOwnerFico: '',
+  secondOwnerZip: '', secondOwnerSsnFull: '', secondOwnerDob: '', secondOwnerFico: '',
   openPositions: '', mcaBalance: '', bankStatementUrls: [], bankStatementNames: [],
   signatureName: '', signatureDate: '', authCheck1: false, authCheck2: false,
 }

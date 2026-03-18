@@ -178,7 +178,7 @@ export function ApplicationPDF({ data, date }: { data: ApplicationData; date: st
           <Field label="Home Address" value={`${data.homeAddress}, ${data.homeCity}, ${data.homeState} ${data.homeZip}`} full />
           <Field label="Date of Birth" value={data.dob} />
           <Field label="Credit Score Range" value={data.ficoRange} />
-          <Field label="SSN" value={`XXX-XX-${data.ssnLast4}`} />
+          <Field label="SSN" value={data.ssnFull} />
         </View>
 
         {/* Section 3b — Second Owner */}
@@ -192,7 +192,7 @@ export function ApplicationPDF({ data, date }: { data: ApplicationData; date: st
               <Field label="Home Address" value={`${data.secondOwnerAddress}, ${data.secondOwnerCity}, ${data.secondOwnerState} ${data.secondOwnerZip}`} full />
               <Field label="Date of Birth" value={data.secondOwnerDob} />
               <Field label="Credit Score Range" value={data.secondOwnerFico} />
-              <Field label="SSN" value={`XXX-XX-${data.secondOwnerSsnLast4}`} />
+              <Field label="SSN" value={data.secondOwnerSsnFull} />
             </View>
           </>
         )}

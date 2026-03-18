@@ -34,25 +34,17 @@ export default function Step2Owner({ data, onChange, errors }: Props) {
     onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => onChange(field, e.target.value),
   })
 
-  // SSN — only store last 4, mask display
+  // SSN — full SSN, auto-format as XXX-XX-XXXX
   const handleSSN = (val: string) => {
-    const digits = val.replace(/\D/g, '').slice(0, 4)
-    onChange('ssnLast4', digits)
+    const digits = val.replace(/\D/g, '').slice(0, 9)
+    let formatted = digits
+    if (digits.length > 5) formatted = digits.slice(0, 3) + '-' + digits.slice(3, 5) + '-' + digits.slice(5)
+    else if (digits.length > 3) formatted = digits.slice(0, 3) + '-' + digits.slice(3)
+    onChange('ssnFull', formatted)
   }
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-      <div style={{
-        padding: '1rem 1.25rem',
-        backgroundColor: 'rgba(201,168,76,0.08)',
-        borderRadius: '8px',
-        borderLeft: '3px solid #C9A84C',
-      }}>
-        <p style={{ fontSize: '0.8rem', color: '#0D1B2A', fontFamily: 'var(--font-ibm, sans-serif)', lineHeight: 1.5 }}>
-          <strong>Security note:</strong> We only store the last 4 digits of your SSN for identity verification.
-          Your full SSN is never transmitted or stored.
-        </p>
-      </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.25rem' }}>
         <Field label="Primary Owner Full Name" required error={errors.ownerName}>
@@ -107,33 +99,18 @@ export default function Step2Owner({ data, onChange, errors }: Props) {
       </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1.25rem' }}>
-        <Field label="Social Security Number — Last 4 Digits Only" required error={errors.ssnLast4}>
-          <div style={{ position: 'relative' }}>
-            <input
-              className={`input-field${errors.ssnLast4 ? ' error' : ''}`}
-              type={ssnFocused ? 'text' : 'password'}
-              placeholder="Last 4 digits only"
-              value={data.ssnLast4}
-              onChange={(e) => handleSSN(e.target.value)}
-              onFocus={() => setSsnFocused(true)}
-              onBlur={() => setSsnFocused(false)}
-              maxLength={4}
-              inputMode="numeric"
-            />
-            <div style={{
-              position: 'absolute',
-              left: '1rem',
-              top: '50%',
-              transform: 'translateY(-50%)',
-              fontSize: '0.75rem',
-              color: '#9CA3AF',
-              pointerEvents: 'none',
-              fontFamily: 'var(--font-ibm, sans-serif)',
-              opacity: data.ssnLast4 ? 0 : 1,
-            }}>
-              XXX-XX-____
-            </div>
-          </div>
+        <Field label="Social Security Number" required error={errors.ssnFull}>
+          <input
+            className={`input-field${errors.ssnFull ? ' error' : ''}`}
+            type={ssnFocused ? 'text' : 'password'}
+            placeholder="XXX-XX-XXXX"
+            value={data.ssnFull}
+            onChange={(e) => handleSSN(e.target.value)}
+            onFocus={() => setSsnFocused(true)}
+            onBlur={() => setSsnFocused(false)}
+            maxLength={11}
+            inputMode="numeric"
+          />
         </Field>
 
         <Field label="Date of Birth" required error={errors.dob}>

@@ -99,14 +99,20 @@ export default function Step3SecondOwner({ data, onChange, errors }: Props) {
       </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1.25rem' }}>
-        <Field label="SSN — Last 4 Digits Only" required error={errors.secondOwnerSsnLast4}>
+        <Field label="Social Security Number" required error={errors.secondOwnerSsnFull}>
           <input
-            className={`input-field${errors.secondOwnerSsnLast4 ? ' error' : ''}`}
+            className={`input-field${errors.secondOwnerSsnFull ? ' error' : ''}`}
             type="password"
-            placeholder="Last 4 digits only"
-            value={data.secondOwnerSsnLast4}
-            onChange={(e) => onChange('secondOwnerSsnLast4', e.target.value.replace(/\D/g, '').slice(0, 4))}
-            maxLength={4}
+            placeholder="XXX-XX-XXXX"
+            value={data.secondOwnerSsnFull}
+            onChange={(e) => {
+              const digits = e.target.value.replace(/\D/g, '').slice(0, 9)
+              let formatted = digits
+              if (digits.length > 5) formatted = digits.slice(0, 3) + '-' + digits.slice(3, 5) + '-' + digits.slice(5)
+              else if (digits.length > 3) formatted = digits.slice(0, 3) + '-' + digits.slice(3)
+              onChange('secondOwnerSsnFull', formatted)
+            }}
+            maxLength={11}
             inputMode="numeric"
           />
         </Field>
