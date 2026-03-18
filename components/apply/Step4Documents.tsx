@@ -1,5 +1,5 @@
 'use client'
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { type ApplicationData } from '@/lib/types'
 
@@ -31,16 +31,29 @@ export default function Step4Documents({ data, onChange, errors }: Props) {
   const [uploadError, setUploadError] = useState('')
   const fileInputRef = useRef<HTMLInputElement>(null)
 
+  // Refs hold the live accumulated state so every upload — concurrent or
+  // sequential — always appends to the real current list, never a stale snapshot.
+  const urlsRef  = useRef<string[]>(data.bankStatementUrls  || [])
+  const namesRef = useRef<string[]>(data.bankStatementNames || [])
+  // Guard against re-entrant uploadFiles calls (user drops while uploading).
+  const uploadingRef = useRef(false)
+
+  // Keep refs in sync when parent state changes (e.g. removeFile updates parent).
+  useEffect(() => { urlsRef.current  = data.bankStatementUrls  || [] }, [data.bankStatementUrls])
+  useEffect(() => { namesRef.current = data.bankStatementNames || [] }, [data.bankStatementNames])
+
   const today = new Date().toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' })
 
   const uploadFiles = async (files: File[]) => {
+    // Block concurrent invocations — second drop/click while upload is running.
+    if (uploadingRef.current) return
+    uploadingRef.current = true
     setUploading(true)
     setUploadError('')
-    const newUrls = [...(data.bankStatementUrls || [])]
-    const newNames = [...(data.bankStatementNames || [])]
 
     for (const file of files) {
-      if (newNames.includes(file.name)) continue
+      // Duplicate check against live ref, not stale prop snapshot.
+      if (namesRef.current.includes(file.name)) continue
 
       try {
         const form = new FormData()
@@ -57,8 +70,13 @@ export default function Step4Documents({ data, onChange, errors }: Props) {
         }
 
         if (json.signedUrl) {
-          newUrls.push(json.signedUrl)
-          newNames.push(file.name)
+          // Update refs immediately so the next file in this loop sees the
+          // accumulated result, not the stale snapshot from the original render.
+          urlsRef.current  = [...urlsRef.current,  json.signedUrl]
+          namesRef.current = [...namesRef.current, file.name]
+          // Notify parent after each successful file so the UI updates live.
+          onChange('bankStatementUrls',  urlsRef.current)
+          onChange('bankStatementNames', namesRef.current)
         }
       } catch (err) {
         console.error(`[upload] Network error for ${file.name}:`, err)
@@ -66,31 +84,31 @@ export default function Step4Documents({ data, onChange, errors }: Props) {
       }
     }
 
-    onChange('bankStatementUrls', newUrls)
-    onChange('bankStatementNames', newNames)
+    uploadingRef.current = false
     setUploading(false)
   }
 
   const removeFile = (index: number) => {
-    const urls = [...(data.bankStatementUrls || [])]
+    const urls  = [...(data.bankStatementUrls  || [])]
     const names = [...(data.bankStatementNames || [])]
     urls.splice(index, 1)
     names.splice(index, 1)
-    onChange('bankStatementUrls', urls)
+    onChange('bankStatementUrls',  urls)
     onChange('bankStatementNames', names)
   }
 
   const handleDrop = (e: React.DragEvent) => {
     e.preventDefault()
     setDragOver(false)
+    if (uploadingRef.current) return  // ignore drops during active upload
     const files = Array.from(e.dataTransfer.files)
     if (files.length) uploadFiles(files)
   }
 
   const handleFileInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || [])
-    if (files.length) uploadFiles(files)
     e.target.value = ''
+    if (files.length) uploadFiles(files)
   }
 
   const fileCount = (data.bankStatementNames || []).length

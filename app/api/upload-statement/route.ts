@@ -31,14 +31,18 @@ export async function POST(req: NextRequest) {
     }
 
     const supabase = getServiceClient()
-    const path = `statements/${Date.now()}-${file.name.replace(/\s+/g, '-')}`
+    // Include crypto.randomUUID() so paths are unique even if Date.now()
+    // returns the same millisecond for two rapid sequential uploads.
+    const uniqueId = crypto.randomUUID()
+    const safeName = file.name.replace(/\s+/g, '-')
+    const path = `statements/${Date.now()}-${uniqueId}-${safeName}`
     const buffer = Buffer.from(await file.arrayBuffer())
 
     console.log('[upload-statement] Uploading to bucket: bank-statements, path:', path)
 
     const { error: uploadError } = await supabase.storage
       .from('bank-statements')
-      .upload(path, buffer, { contentType: file.type || 'application/octet-stream' })
+      .upload(path, buffer, { contentType: file.type || 'application/octet-stream', upsert: false })
 
     if (uploadError) {
       console.error('[upload-statement] Supabase upload error:', JSON.stringify(uploadError))
