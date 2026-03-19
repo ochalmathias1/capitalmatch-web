@@ -35,9 +35,11 @@ export async function POST(req: NextRequest) {
       .createSignedUrl(pdfPath, 3600)
 
     // Step 3 — Save to Supabase applications table
+    // Use status 'processing' here — we flip to 'submitted' AFTER documents
+    // are inserted so the pipeline never sees 0 bank statements.
     const { error: dbError } = await supabase.from('applications').insert({
       deal_id: dealId,
-      status: 'submitted',
+      status: 'processing',
       created_at: timestamp,
       business_name: data.businessName,
       dba: data.dba || null,
@@ -75,9 +77,50 @@ export async function POST(req: NextRequest) {
 
     if (dbError) throw new Error('Failed to save application')
 
-    // Step 4 — Fetch bank statement signed URLs for email attachments
+    // Step 4 — Persist bank statements to documents table + fetch for email
     const bankUrls: string[] = data.bankStatementUrls || []
     const bankNames: string[] = data.bankStatementNames || []
+
+    // Extract storage path from signed URL: /storage/v1/object/sign/{bucket}/{path}?token=...
+    function extractStoragePath(signedUrl: string): string {
+      try {
+        const url = new URL(signedUrl)
+        const match = url.pathname.match(/\/storage\/v1\/object\/sign\/bank-statements\/(.+)/)
+        return match ? match[1] : ''
+      } catch {
+        return ''
+      }
+    }
+
+    // Insert document records so the pipeline can find bank statements.
+    // Stored BEFORE status is set to 'submitted' to avoid a race condition
+    // where the pipeline Realtime listener fires and sees 0 documents.
+    const documentInserts = bankNames.map((name, i) => ({
+      deal_id:   dealId,
+      type:      'bank_statement',
+      file_name: name || `statement-${i + 1}.pdf`,
+      file_path: extractStoragePath(bankUrls[i] || ''),
+      file_url:  bankUrls[i] || '',
+      bucket:    'bank-statements',
+    })).filter(d => d.file_name)
+
+    if (documentInserts.length > 0) {
+      const { error: docsError } = await supabase.from('documents').insert(documentInserts)
+      if (docsError) {
+        console.error('Failed to insert document records:', docsError.message, docsError)
+        // Non-fatal: continue so submission isn't blocked, but log clearly
+      } else {
+        console.log(`Inserted ${documentInserts.length} document record(s) for ${dealId}`)
+      }
+    }
+
+    // Flip to 'submitted' now that documents are in the table.
+    // This is what triggers the pipeline Realtime listener.
+    const { error: statusError } = await supabase
+      .from('applications')
+      .update({ status: 'submitted' })
+      .eq('deal_id', dealId)
+    if (statusError) console.error('Failed to set status submitted:', statusError.message)
 
     // Fetch bank statement files as buffers for email attachment
     const bankAttachments: { filename: string; content: Buffer }[] = []
