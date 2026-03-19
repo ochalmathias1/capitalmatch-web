@@ -18,6 +18,7 @@ export interface ApplicationData {
 
   // Step 2 — Owner
   ownerName: string
+  ownerCellPhone: string
   ownerTitle: string
   ownershipPct: string
   homeAddress: string
@@ -57,7 +58,7 @@ export const EMPTY_APPLICATION: ApplicationData = {
   businessState: '', businessZip: '', businessPhone: '', ein: '',
   dateStarted: '', entityType: '', businessEmail: '', businessDescription: '',
   monthlyRevenue: '', requestedAmount: '', useOfFunds: '',
-  ownerName: '', ownerTitle: '', ownershipPct: '', homeAddress: '',
+  ownerName: '', ownerCellPhone: '', ownerTitle: '', ownershipPct: '', homeAddress: '',
   homeCity: '', homeState: '', homeZip: '', ssnFull: '', dob: '', ficoRange: '',
   hasSecondOwner: false,
   secondOwnerName: '', secondOwnerTitle: '', secondOwnerPct: '',

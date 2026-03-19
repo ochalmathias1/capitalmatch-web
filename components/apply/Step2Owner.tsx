@@ -50,6 +50,12 @@ export default function Step2Owner({ data, onChange, errors }: Props) {
         <Field label="Primary Owner Full Name" required error={errors.ownerName}>
           <input {...inp('ownerName')} type="text" placeholder="First and Last Name" className={`input-field${errors.ownerName ? ' error' : ''}`} />
         </Field>
+        <Field label="Owner Personal Cell Phone" required error={errors.ownerCellPhone}>
+          <input {...inp('ownerCellPhone')} type="tel" placeholder="(555) 000-0000" className={`input-field${errors.ownerCellPhone ? ' error' : ''}`} />
+        </Field>
+      </div>
+
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.25rem' }}>
         <Field label="Title" required error={errors.ownerTitle}>
           <select {...inp('ownerTitle')} className={`input-field${errors.ownerTitle ? ' error' : ''}`}>
             <option value="">Select title</option>

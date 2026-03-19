@@ -54,6 +54,7 @@ export async function POST(req: NextRequest) {
       requested_amount_range: data.requestedAmount,
       use_of_funds: data.useOfFunds,
       owner_name: data.ownerName,
+      owner_cell_phone: data.ownerCellPhone || null,
       owner_title: data.ownerTitle,
       ownership_pct: parseInt(data.ownershipPct) || null,
       home_address: `${data.homeAddress}, ${data.homeCity}, ${data.homeState} ${data.homeZip}`,

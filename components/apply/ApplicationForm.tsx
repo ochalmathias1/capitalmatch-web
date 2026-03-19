@@ -34,6 +34,7 @@ function validateStep(step: number, data: ApplicationData): Partial<Record<keyof
 
   if (step === 2) {
     if (!data.ownerName.trim()) errs.ownerName = 'Owner name is required'
+    if (!data.ownerCellPhone.trim()) errs.ownerCellPhone = 'Cell phone is required'
     if (!data.ownerTitle) errs.ownerTitle = 'Title is required'
     if (!data.ownershipPct) errs.ownershipPct = 'Ownership % is required'
     if (!data.homeAddress.trim()) errs.homeAddress = 'Home address is required'

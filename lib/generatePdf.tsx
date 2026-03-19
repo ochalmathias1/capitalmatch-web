@@ -300,7 +300,8 @@ function SectionOwner({ data, S }: { data: ApplicationData; S: StyleSet }) {
     <>
       <Text style={S.sectionTitle}>SECTION 3 — OWNER INFORMATION</Text>
       <View style={S.grid2}>
-        <Field S={S} label="Owner Name"          value={data.ownerName} />
+        <Field S={S} label="Owner Name"           value={data.ownerName} />
+        <Field S={S} label="Cell Phone"           value={data.ownerCellPhone} />
         <Field S={S} label="Title"               value={data.ownerTitle} />
         <Field S={S} label="Ownership"           value={`${data.ownershipPct}%`} />
         <Field S={S} label="Home Address"        value={`${data.homeAddress}, ${data.homeCity}, ${data.homeState} ${data.homeZip}`} full />
