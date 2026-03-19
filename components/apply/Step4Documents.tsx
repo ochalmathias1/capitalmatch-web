@@ -7,6 +7,7 @@ interface Props {
   data: ApplicationData
   onChange: (field: keyof ApplicationData, value: string | string[] | boolean) => void
   errors: Partial<Record<keyof ApplicationData, string>>
+  uploadToken: string
 }
 
 function Field({ label, error, required, children }: {
@@ -25,7 +26,7 @@ function Field({ label, error, required, children }: {
 
 const AUTH_TEXT = `By signing below, I authorize CapitalMatch, its assigns, agents, banks, and financial institutions to obtain an investigative or consumer credit report from any credit bureau or credit reporting agency, and to investigate the references given or any other statements or data obtained from the applicant or any other person pertaining to the applicant. I also authorize CapitalMatch to act as my exclusive commercial finance broker for a period of 90 days from the date signed.`
 
-export default function Step4Documents({ data, onChange, errors }: Props) {
+export default function Step4Documents({ data, onChange, errors, uploadToken }: Props) {
   const [dragOver, setDragOver] = useState(false)
   const [uploading, setUploading] = useState(false)
   const [uploadError, setUploadError] = useState('')
@@ -58,6 +59,7 @@ export default function Step4Documents({ data, onChange, errors }: Props) {
       try {
         const form = new FormData()
         form.append('file', file)
+        if (uploadToken) form.append('uploadToken', uploadToken)
 
         const res = await fetch('/api/upload-statement', { method: 'POST', body: form })
         const json = await res.json()

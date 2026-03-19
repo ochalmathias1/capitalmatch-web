@@ -70,6 +70,9 @@ function validateStep(step: number, data: ApplicationData): Partial<Record<keyof
   return errs
 }
 
+// Fields that must never be persisted to localStorage (PII)
+const SENSITIVE_FIELDS: ReadonlyArray<keyof ApplicationData> = ['ssnFull', 'dob', 'secondOwnerSsnFull', 'secondOwnerDob']
+
 export default function ApplicationForm() {
   const router = useRouter()
   const [step, setStep] = useState(1)
@@ -78,6 +81,7 @@ export default function ApplicationForm() {
   const [errors, setErrors] = useState<Partial<Record<keyof ApplicationData, string>>>({})
   const [submitting, setSubmitting] = useState(false)
   const [submitError, setSubmitError] = useState('')
+  const [uploadToken, setUploadToken] = useState('')
 
   // Load from localStorage
   useEffect(() => {
@@ -85,6 +89,14 @@ export default function ApplicationForm() {
       const saved = localStorage.getItem(STORAGE_KEY)
       if (saved) setData(JSON.parse(saved))
     } catch {}
+  }, [])
+
+  // Fetch a short-lived upload token on mount
+  useEffect(() => {
+    fetch('/api/upload-token')
+      .then(r => r.json())
+      .then(j => { if (j.token) setUploadToken(j.token) })
+      .catch(() => {})
   }, [])
 
   // Save to localStorage on change
@@ -95,7 +107,11 @@ export default function ApplicationForm() {
       if (field === 'ownershipPct') {
         next.hasSecondOwner = parseInt(value as string || '0') < 100
       }
-      try { localStorage.setItem(STORAGE_KEY, JSON.stringify(next)) } catch {}
+      try {
+        const sanitized = { ...next }
+        SENSITIVE_FIELDS.forEach(f => delete (sanitized as Record<string, unknown>)[f])
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(sanitized))
+      } catch {}
       return next
     })
     setErrors((prev) => { const e = { ...prev }; delete e[field]; return e })
@@ -207,7 +223,7 @@ export default function ApplicationForm() {
           {step === 2 && <Step2Owner data={data} onChange={handleChange} errors={errors} />}
           {step === 3 && data.hasSecondOwner && <Step3SecondOwner data={data} onChange={handleChange} errors={errors} />}
           {(step === 4 || (step === 3 && !data.hasSecondOwner)) && (
-            <Step4Documents data={data} onChange={handleChange} errors={errors} />
+            <Step4Documents data={data} onChange={handleChange} errors={errors} uploadToken={uploadToken} />
           )}
         </motion.div>
       </AnimatePresence>
