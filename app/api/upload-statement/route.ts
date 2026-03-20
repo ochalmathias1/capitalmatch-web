@@ -3,7 +3,7 @@ import { getServiceClient } from '@/lib/supabase'
 import { verifyToken } from '@/app/api/upload-token/route'
 
 const ALLOWED_MIME_TYPES = new Set(['application/pdf', 'image/jpeg', 'image/png'])
-const MAX_FILE_SIZE_BYTES = 25 * 1024 * 1024  // 25 MB
+const MAX_FILE_SIZE_BYTES = 10 * 1024 * 1024  // 10 MB
 
 export async function POST(req: NextRequest) {
   try {
@@ -32,7 +32,7 @@ export async function POST(req: NextRequest) {
     // ── File size validation ───────────────────────────────────────────────
     if (file.size > MAX_FILE_SIZE_BYTES) {
       return NextResponse.json(
-        { error: 'File too large. Maximum size is 25 MB.' },
+        { error: 'File too large. Maximum size is 10 MB.' },
         { status: 400 },
       )
     }

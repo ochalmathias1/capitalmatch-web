@@ -8,9 +8,9 @@ import { NextRequest, NextResponse } from 'next/server'
 // For full cross-region rate limiting, replace with Upstash Redis.
 // ─────────────────────────────────────────────────────────────────────────────
 
-const WINDOW_MS  = 60_000  // 1 minute
-const MAX_SUBMIT = 3       // max submissions per IP per window
-const MAX_UPLOAD = 20      // max uploads per IP per window
+const WINDOW_MS  = 60 * 60 * 1000  // 1 hour
+const MAX_SUBMIT = 5                // max submissions per IP per hour
+const MAX_UPLOAD = 30               // max uploads per IP per hour
 
 const submitHits = new Map<string, number[]>()
 const uploadHits = new Map<string, number[]>()
