@@ -61,7 +61,7 @@ function validateStep(step: number, data: ApplicationData): Partial<Record<keyof
 
   if (step === 4) {
     if (!data.openPositions) errs.openPositions = 'Please select your current positions'
-    if ((data.bankStatementUrls || []).length < 4) errs.bankStatementUrls = 'Please upload at least 4 months of bank statements'
+    if ((data.bankStatementUrls || []).length < 1) errs.bankStatementUrls = 'Please upload at least one bank statement'
     if (!data.signatureName.trim()) errs.signatureName = 'Signature is required'
     if (!data.authCheck1) errs.authCheck1 = 'Authorization required'
     if (!data.authCheck2) errs.authCheck2 = 'Agreement required'
@@ -184,7 +184,7 @@ export default function ApplicationForm() {
   }
 
   const canSubmit =
-    (data.bankStatementUrls || []).length >= 4 &&
+    (data.bankStatementUrls || []).length >= 1 &&
     data.signatureName.trim() &&
     data.authCheck1 &&
     data.authCheck2 &&

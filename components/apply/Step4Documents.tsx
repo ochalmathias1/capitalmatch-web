@@ -53,6 +53,12 @@ export default function Step4Documents({ data, onChange, errors, uploadToken }: 
     setUploadError('')
 
     for (const file of files) {
+      // Max 6 bank statements
+      if (urlsRef.current.length >= 6) {
+        setUploadError('Maximum 6 bank statements allowed. Remove a file before adding more.')
+        break
+      }
+
       // Duplicate check against live ref, not stale prop snapshot.
       if (namesRef.current.includes(file.name)) continue
 
@@ -114,7 +120,7 @@ export default function Step4Documents({ data, onChange, errors, uploadToken }: 
   }
 
   const fileCount = (data.bankStatementNames || []).length
-  const needsMore = fileCount < 4
+  const needsMore = fileCount < 1
 
   const openPositions = ['No existing advances — 1st position', '1 open advance — 2nd position', '2 open advances — 3rd position', '3 or more open advances']
 
@@ -156,7 +162,7 @@ export default function Step4Documents({ data, onChange, errors, uploadToken }: 
           onDragLeave={() => setDragOver(false)}
           onDrop={handleDrop}
           animate={{
-            borderColor: dragOver ? '#C9A84C' : needsMore && fileCount > 0 ? '#E5A84C' : '#D1D5DB',
+            borderColor: dragOver ? '#C9A84C' : '#D1D5DB',
             backgroundColor: dragOver ? '#FFFBF0' : '#FAFAFA',
           }}
           style={{
@@ -193,13 +199,13 @@ export default function Step4Documents({ data, onChange, errors, uploadToken }: 
                 <path d="M20 28V16M14 22l6-6 6 6" stroke={dragOver ? '#C9A84C' : '#9CA3AF'} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
               <p style={{ fontWeight: 600, color: '#0D1B2A', marginBottom: '0.4rem', fontFamily: 'var(--font-ibm, sans-serif)' }}>
-                Upload your last 4 months of bank statements
+                Upload your bank statements
               </p>
               <p style={{ fontSize: '0.8rem', color: '#6B7280', marginBottom: '0.25rem', fontFamily: 'var(--font-ibm, sans-serif)' }}>
-                If today is past the 20th, also include your current month to date statement
+                Upload 1–6 months of statements. If today is past the 20th, include your current month to date statement.
               </p>
               <p style={{ fontSize: '0.75rem', color: '#9CA3AF', fontFamily: 'var(--font-ibm, sans-serif)' }}>
-                Accepted: PDF, JPG, PNG · Multiple files allowed · Click or drag files here
+                Accepted: PDF, JPG, PNG · Up to 6 files · Click or drag files here
               </p>
             </>
           )}
@@ -256,13 +262,13 @@ export default function Step4Documents({ data, onChange, errors, uploadToken }: 
             overflow: 'hidden',
           }}>
             <motion.div
-              animate={{ width: `${Math.min((fileCount / 4) * 100, 100)}%` }}
+              animate={{ width: `${Math.min((fileCount / 6) * 100, 100)}%` }}
               transition={{ duration: 0.4 }}
-              style={{ height: '100%', backgroundColor: fileCount >= 4 ? '#1A6B4A' : '#C9A84C', borderRadius: '2px' }}
+              style={{ height: '100%', backgroundColor: fileCount >= 1 ? '#1A6B4A' : '#C9A84C', borderRadius: '2px' }}
             />
           </div>
-          <span style={{ fontSize: '0.75rem', color: fileCount >= 4 ? '#1A6B4A' : '#6B7280', fontFamily: 'var(--font-ibm, sans-serif)', whiteSpace: 'nowrap', minWidth: '80px' }}>
-            {fileCount} of 4 required
+          <span style={{ fontSize: '0.75rem', color: fileCount >= 1 ? '#1A6B4A' : '#6B7280', fontFamily: 'var(--font-ibm, sans-serif)', whiteSpace: 'nowrap', minWidth: '80px' }}>
+            {fileCount} / 6 max
           </span>
         </div>
       </div>

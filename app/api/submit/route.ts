@@ -23,7 +23,10 @@ const str    = (max: number) => z.string().min(1).max(max).trim()
 const optStr = (max: number) => z.string().max(max).optional()
 const stateZ  = z.string().length(2).regex(/^[A-Z]{2}$/)
 const zipZ    = z.string().regex(/^\d{5}(-\d{4})?$/)
-const phoneZ  = z.string().regex(/^\(\d{3}\) \d{3}-\d{4}$/, 'Invalid phone format')
+const phoneZ  = z.string().refine(
+  s => { const d = s.replace(/\D/g, ''); return d.length === 10 || (d.length === 11 && d[0] === '1') },
+  'Please enter a valid 10-digit phone number',
+)
 const ssnZ    = z.string().regex(/^\d{3}-\d{2}-\d{4}$/, 'SSN must be XXX-XX-XXXX')
 const einZ    = z.string().regex(/^\d{2}-\d{7}$/, 'EIN must be XX-XXXXXXX')
 const dateZ   = z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'Invalid date')
@@ -63,7 +66,7 @@ const ApplicationSchema = z.object({
   // Documents
   openPositions:       z.enum(POSITIONS),
   mcaBalance:          optStr(50),
-  bankStatementUrls:   z.array(urlZ).min(4, 'At least 4 bank statements required'),
+  bankStatementUrls:   z.array(urlZ).min(1, 'At least 1 bank statement is required').max(6, 'Maximum 6 bank statements allowed'),
   bankStatementNames:  z.array(z.string().max(500)).min(1),
   signatureName:       str(200),
   authCheck1:          z.literal(true),
@@ -261,8 +264,8 @@ export async function POST(req: NextRequest) {
     // ── 8. Send internal submission email ─────────────────────────────────
     await resend.emails.send({
       from:    `CapitalMatch <${process.env.SUBMISSIONS_EMAIL || 'noreply@capitalmatchfunding.com'}>`,
-      to:      process.env.SUBMISSIONS_EMAIL || 'submissions@capitalmatchfunding.com',
-      replyTo: 'submissions@capitalmatchfunding.com',
+      to:      process.env.SUBMISSIONS_EMAIL || 'subs@capitalmatchfunding.com',
+      replyTo: 'subs@capitalmatchfunding.com',
       subject: `NEW APPLICATION -- ${data.businessName.toUpperCase()}`,
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; color: #0D1B2A;">
@@ -290,77 +293,6 @@ export async function POST(req: NextRequest) {
         { filename: `${dealId}-application.pdf`, content: pdfBuffer },
         ...bankAttachments,
       ],
-    })
-
-    // ── 9. Send merchant confirmation email ───────────────────────────────
-    await resend.emails.send({
-      from:    'CapitalMatch <noreply@capitalmatchfunding.com>',
-      to:      data.businessEmail,
-      replyTo: 'replies@capitalmatchfunding.com',
-      subject: `Application Received — ${dealId}`,
-      html: `
-        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; color: #0D1B2A;">
-          <div style="background: #0D1B2A; padding: 24px; text-align: center;">
-            <h1 style="color: #C9A84C; font-size: 24px; margin: 0;">CapitalMatch</h1>
-            <p style="color: rgba(255,255,255,0.7); margin: 8px 0 0; font-size: 14px;">Application Received</p>
-          </div>
-          <div style="padding: 32px; background: #ffffff; border: 1px solid #e5e7eb;">
-            <p style="font-size: 16px; font-weight: 600; margin: 0 0 8px;">Dear ${data.ownerName},</p>
-            <p style="font-size: 14px; color: #374151; margin: 0 0 24px; line-height: 1.6;">
-              We have received your CapitalMatch application. Here is what happens next.
-            </p>
-            <div style="background: #F9FAFB; border: 1px solid #E5E7EB; border-radius: 8px; padding: 20px; margin-bottom: 24px;">
-              <p style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: #9CA3AF; margin: 0 0 4px;">Your Reference Number</p>
-              <p style="font-family: monospace; font-size: 15px; font-weight: 700; color: #C9A84C; margin: 0;">${dealId}</p>
-            </div>
-            <p style="font-size: 14px; font-weight: 600; color: #0D1B2A; margin: 0 0 12px;">What happens next:</p>
-            <table style="width: 100%; border-collapse: collapse; margin-bottom: 24px;">
-              <tr>
-                <td style="padding: 10px 0; border-bottom: 1px solid #F3F4F6; vertical-align: top; width: 28px;">
-                  <div style="width: 22px; height: 22px; background: #0D1B2A; border-radius: 50%; text-align: center; line-height: 22px; font-size: 11px; font-weight: 700; color: #C9A84C;">1</div>
-                </td>
-                <td style="padding: 10px 0 10px 12px; border-bottom: 1px solid #F3F4F6; font-size: 13px; color: #374151; line-height: 1.5;">
-                  <strong>Application review</strong> — Our team is reviewing your application now.
-                </td>
-              </tr>
-              <tr>
-                <td style="padding: 10px 0; border-bottom: 1px solid #F3F4F6; vertical-align: top;">
-                  <div style="width: 22px; height: 22px; background: #0D1B2A; border-radius: 50%; text-align: center; line-height: 22px; font-size: 11px; font-weight: 700; color: #C9A84C;">2</div>
-                </td>
-                <td style="padding: 10px 0 10px 12px; border-bottom: 1px solid #F3F4F6; font-size: 13px; color: #374151; line-height: 1.5;">
-                  <strong>Lender matching</strong> — We match your profile to our network of lending partners.
-                </td>
-              </tr>
-              <tr>
-                <td style="padding: 10px 0; border-bottom: 1px solid #F3F4F6; vertical-align: top;">
-                  <div style="width: 22px; height: 22px; background: #0D1B2A; border-radius: 50%; text-align: center; line-height: 22px; font-size: 11px; font-weight: 700; color: #C9A84C;">3</div>
-                </td>
-                <td style="padding: 10px 0 10px 12px; border-bottom: 1px solid #F3F4F6; font-size: 13px; color: #374151; line-height: 1.5;">
-                  <strong>Offers collected</strong> — Lenders review your file and return funding offers.
-                </td>
-              </tr>
-              <tr>
-                <td style="padding: 10px 0; vertical-align: top;">
-                  <div style="width: 22px; height: 22px; background: #C9A84C; border-radius: 50%; text-align: center; line-height: 22px; font-size: 11px; font-weight: 700; color: #0D1B2A;">4</div>
-                </td>
-                <td style="padding: 10px 0 10px 12px; font-size: 13px; color: #374151; line-height: 1.5;">
-                  <strong>You choose</strong> — We send you all your offers side by side. You pick the one that works best.
-                </td>
-              </tr>
-            </table>
-            <div style="background: #F0FDF4; border: 1px solid #BBF7D0; border-radius: 8px; padding: 16px; margin-bottom: 24px;">
-              <p style="font-size: 14px; font-weight: 600; color: #166534; margin: 0 0 4px;">⏱ Expected timeline: within 24 hours</p>
-              <p style="font-size: 13px; color: #15803D; margin: 0;">You can expect to hear from us with funding offer details within 24 hours.</p>
-            </div>
-            <p style="font-size: 13px; color: #6B7280; margin: 0; line-height: 1.6;">
-              Confirmation sent to: ${data.businessEmail}. Questions? Simply reply to this email.
-            </p>
-          </div>
-          <div style="padding: 16px 32px; background: #F9FAFB; border: 1px solid #E5E7EB; border-top: none; text-align: center;">
-            <p style="font-size: 12px; color: #9CA3AF; margin: 0;">CapitalMatch — capitalmatchfunding.com</p>
-          </div>
-        </div>
-      `,
     })
 
     return NextResponse.json({ success: true, reference: dealId })
