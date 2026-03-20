@@ -116,7 +116,7 @@ export async function POST(req: NextRequest) {
 
     const parsed = ApplicationSchema.safeParse(rawData)
     if (!parsed.success) {
-      const firstError = parsed.error.errors[0]
+      const firstError = parsed.error.issues[0]
       return NextResponse.json(
         { error: `Validation error: ${firstError.path.join('.')} — ${firstError.message}` },
         { status: 400 },
