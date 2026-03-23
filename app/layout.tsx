@@ -23,15 +23,28 @@ const dancing = Dancing_Script({
 })
 
 export const metadata: Metadata = {
-  title: 'CapitalMatch — Business Funding Made Simple',
-  description: 'One application reaches our entire network of private lenders. Get funded in 24 hours with no broker fees.',
-  keywords: 'merchant cash advance, business funding, MCA, working capital, business loans',
+  title: 'CapitalMatch — Business Funding in 24 Hours',
+  description: 'One application. 40+ lenders. Zero broker fees. Get funded fast.',
+  keywords: 'merchant cash advance, business funding, MCA, working capital, small business loans',
   openGraph: {
-    title: 'CapitalMatch — Business Funding Made Simple',
-    description: 'One application reaches our entire network of private lenders.',
+    title: 'CapitalMatch — Business Funding in 24 Hours',
+    description: 'One application. 40+ lenders. Zero broker fees. Get funded fast.',
     url: 'https://capitalmatchfunding.com',
     siteName: 'CapitalMatch',
     type: 'website',
+    images: [
+      {
+        url: 'https://capitalmatchfunding.com/og-image.png',
+        width: 1200,
+        height: 630,
+        alt: 'CapitalMatch — Business Funding in 24 Hours',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'CapitalMatch — Business Funding in 24 Hours',
+    description: 'One application. 40+ lenders. Zero broker fees. Get funded fast.',
   },
 }
 
