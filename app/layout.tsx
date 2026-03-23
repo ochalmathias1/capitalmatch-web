@@ -57,7 +57,7 @@ export const metadata: Metadata = {
     images: ['/opengraph-image'],
   },
   verification: {
-    google: 'PASTE_YOUR_CODE_HERE',
+    google: '_tkY3SudMUUufmvrdDUXmssXDQoY64j_B5fy6_jElX4',
   },
 }
 
