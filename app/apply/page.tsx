@@ -1,10 +1,24 @@
+import type { Metadata } from 'next'
 import Navigation from '@/components/Navigation'
 import Footer from '@/components/Footer'
 import ApplicationForm from '@/components/apply/ApplicationForm'
 
-export const metadata = {
-  title: 'Apply for Business Funding — CapitalMatch',
-  description: 'One application reaches our entire network of private lenders. Apply in minutes.',
+export const metadata: Metadata = {
+  title: 'Apply for Business Funding',
+  description: 'Fill out our simple 5-minute application. No hard credit check. No broker fees. See your merchant cash advance options in 24 hours.',
+  robots: { index: true, follow: true },
+  alternates: { canonical: 'https://capitalmatchfunding.com/apply' },
+  openGraph: {
+    title: 'Apply for Business Funding | CapitalMatch',
+    description: 'Fill out our simple 5-minute application. No hard credit check. No broker fees. See your funding options in 24 hours.',
+    url: 'https://capitalmatchfunding.com/apply',
+    images: [{ url: '/opengraph-image', width: 1200, height: 630, alt: 'Apply for Business Funding — CapitalMatch' }],
+  },
+  twitter: {
+    title: 'Apply for Business Funding | CapitalMatch',
+    description: 'Fill out our simple 5-minute application. No hard credit check. No broker fees. Funding in 24 hours.',
+    images: ['/opengraph-image'],
+  },
 }
 
 export default function ApplyPage() {

@@ -23,28 +23,41 @@ const dancing = Dancing_Script({
 })
 
 export const metadata: Metadata = {
-  title: 'CapitalMatch — Business Funding in 24 Hours',
-  description: 'One application. 40+ lenders. Zero broker fees. Get funded fast.',
-  keywords: 'merchant cash advance, business funding, MCA, working capital, small business loans',
+  metadataBase: new URL('https://capitalmatchfunding.com'),
+  title: {
+    template: '%s | CapitalMatch',
+    default: 'CapitalMatch — Fast Business Funding | No Broker Fees',
+  },
+  description: 'Get funded in 24 hours with zero broker fees. One application reaches 40+ private lenders. All industries. Bad credit options available. Apply free today.',
+  keywords: [
+    'merchant cash advance',
+    'business funding',
+    'MCA broker',
+    'small business loans',
+    'fast business funding',
+    'no broker fees',
+    'bad credit business loans',
+    'MCA funding 24 hours',
+    'business cash advance online',
+    'merchant cash advance no broker fees',
+    'business funding bad credit',
+    'same day business funding',
+    'business funding New York',
+    'MCA funding fast',
+  ],
+  robots: { index: true, follow: true, googleBot: { index: true, follow: true } },
+  alternates: { canonical: 'https://capitalmatchfunding.com' },
   openGraph: {
-    title: 'CapitalMatch — Business Funding in 24 Hours',
-    description: 'One application. 40+ lenders. Zero broker fees. Get funded fast.',
-    url: 'https://capitalmatchfunding.com',
-    siteName: 'CapitalMatch',
     type: 'website',
-    images: [
-      {
-        url: 'https://capitalmatchfunding.com/og-image.png',
-        width: 1200,
-        height: 630,
-        alt: 'CapitalMatch — Business Funding in 24 Hours',
-      },
-    ],
+    siteName: 'CapitalMatch',
+    images: [{ url: '/opengraph-image', width: 1200, height: 630, alt: 'CapitalMatch — Fast Business Funding | No Broker Fees' }],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'CapitalMatch — Business Funding in 24 Hours',
-    description: 'One application. 40+ lenders. Zero broker fees. Get funded fast.',
+    images: ['/opengraph-image'],
+  },
+  verification: {
+    google: 'PASTE_YOUR_CODE_HERE',
   },
 }
 

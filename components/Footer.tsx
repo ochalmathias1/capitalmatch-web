@@ -37,15 +37,10 @@ export default function Footer() {
           <div>
             <p style={{ fontSize: '0.75rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#C9A84C', marginBottom: '1rem', fontFamily: 'var(--font-ibm, sans-serif)' }}>Contact Us</p>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-              <div>
-                <p style={{ fontSize: '0.8rem', color: 'rgba(255,255,255,0.45)', fontFamily: 'var(--font-ibm, sans-serif)', marginBottom: '0.2rem' }}>Dave Jacobs</p>
-                <a href="tel:6463069312" style={{ color: 'rgba(255,255,255,0.75)', fontSize: '0.9rem', fontFamily: 'var(--font-ibm, sans-serif)', textDecoration: 'none', fontWeight: 500 }}>646-306-9312</a>
-              </div>
-              <div>
-                <p style={{ fontSize: '0.8rem', color: 'rgba(255,255,255,0.45)', fontFamily: 'var(--font-ibm, sans-serif)', marginBottom: '0.2rem' }}>Matt Jacobs</p>
-                <a href="tel:8482499289" style={{ color: 'rgba(255,255,255,0.75)', fontSize: '0.9rem', fontFamily: 'var(--font-ibm, sans-serif)', textDecoration: 'none', fontWeight: 500 }}>848-249-9289</a>
-              </div>
-              <a href="mailto:support@capitalmatchfunding.com" style={{ color: '#C9A84C', fontSize: '0.85rem', fontFamily: 'var(--font-ibm, sans-serif)', textDecoration: 'none' }}>support@capitalmatchfunding.com</a>
+              <p style={{ fontSize: '0.85rem', color: 'rgba(255,255,255,0.55)', fontFamily: 'var(--font-ibm, sans-serif)', lineHeight: 1.6 }}>
+                Questions? We are here to help.
+              </p>
+              <a href="mailto:support@capitalmatchfunding.com" style={{ color: '#C9A84C', fontSize: '0.875rem', fontFamily: 'var(--font-ibm, sans-serif)', textDecoration: 'none' }}>support@capitalmatchfunding.com</a>
             </div>
           </div>
         </div>

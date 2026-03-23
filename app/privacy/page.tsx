@@ -1,8 +1,10 @@
+import type { Metadata } from 'next'
 import Navigation from '@/components/Navigation'
 import Footer from '@/components/Footer'
 
-export const metadata = {
-  title: 'Privacy Policy — CapitalMatch',
+export const metadata: Metadata = {
+  title: 'Privacy Policy',
+  robots: { index: false, follow: false },
 }
 
 export default function PrivacyPage() {
