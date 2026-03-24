@@ -34,6 +34,13 @@ export default function Step2Owner({ data, onChange, errors }: Props) {
     onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => onChange(field, e.target.value),
   })
 
+  const handlePhone = (val: string) => {
+    const digits = val.replace(/\D/g, '').slice(0, 10)
+    if (digits.length <= 3) { onChange('ownerCellPhone', digits); return }
+    if (digits.length <= 6) { onChange('ownerCellPhone', '(' + digits.slice(0, 3) + ') ' + digits.slice(3)); return }
+    onChange('ownerCellPhone', '(' + digits.slice(0, 3) + ') ' + digits.slice(3, 6) + '-' + digits.slice(6))
+  }
+
   // SSN — full SSN, auto-format as XXX-XX-XXXX
   const handleSSN = (val: string) => {
     const digits = val.replace(/\D/g, '').slice(0, 9)
@@ -51,7 +58,14 @@ export default function Step2Owner({ data, onChange, errors }: Props) {
           <input {...inp('ownerName')} type="text" placeholder="First and Last Name" className={`input-field${errors.ownerName ? ' error' : ''}`} />
         </Field>
         <Field label="Owner Personal Cell Phone" required error={errors.ownerCellPhone}>
-          <input {...inp('ownerCellPhone')} type="tel" placeholder="(555) 000-0000" className={`input-field${errors.ownerCellPhone ? ' error' : ''}`} />
+          <input
+            className={`input-field${errors.ownerCellPhone ? ' error' : ''}`}
+            type="tel"
+            placeholder="(555) 000-0000"
+            value={data.ownerCellPhone}
+            onChange={(e) => handlePhone(e.target.value)}
+            inputMode="numeric"
+          />
         </Field>
       </div>
 
@@ -73,7 +87,11 @@ export default function Step2Owner({ data, onChange, errors }: Props) {
             max={100}
             placeholder="e.g. 100"
             value={data.ownershipPct}
-            onChange={(e) => onChange('ownershipPct', e.target.value)}
+            onChange={(e) => {
+              const v = e.target.value
+              const num = parseInt(v, 10)
+              onChange('ownershipPct', isNaN(num) ? '' : String(Math.min(100, Math.max(0, num))))
+            }}
             style={{ width: '120px' }}
           />
           <span style={{ color: '#6B7280', fontFamily: 'var(--font-ibm, sans-serif)' }}>%</span>

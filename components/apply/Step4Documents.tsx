@@ -122,7 +122,7 @@ export default function Step4Documents({ data, onChange, errors, uploadToken }: 
   const fileCount = (data.bankStatementNames || []).length
   const needsMore = fileCount < 1
 
-  const openPositions = ['No existing advances — 1st position', '1 open advance — 2nd position', '2 open advances — 3rd position', '3 or more open advances']
+  const openPositions = ['No current advances — 1st position', '1 open advance — 2nd position', '2 open advances — 3rd position', '3 or more open advances']
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '1.75rem' }}>
