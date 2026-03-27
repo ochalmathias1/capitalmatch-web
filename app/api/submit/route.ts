@@ -128,19 +128,20 @@ export async function POST(req: NextRequest) {
       )
     }
 
-    const data    = parsed.data as ApplicationData
-    const now     = new Date()
-    const dateStr = now.toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' })
-    const timestamp = now.toISOString()
+    const data       = parsed.data as ApplicationData
+    const brokerCode = parsed.data.brokerCode ?? null
+    const now        = new Date()
+    const dateStr    = now.toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' })
+    const timestamp  = now.toISOString()
 
     // ── 2a. Broker lookup (if referral code provided) ─────────────────────
     let brokerId:   string | null = null
     let brokerName: string | null = null
-    if (data.brokerCode) {
+    if (brokerCode) {
       const { data: broker } = await supabase
         .from('brokers')
         .select('id, name')
-        .eq('code', data.brokerCode)
+        .eq('code', brokerCode)
         .eq('active', true)
         .maybeSingle()
       if (broker) {
@@ -178,7 +179,7 @@ export async function POST(req: NextRequest) {
       created_at:           timestamp,
       submitted_by:         brokerId ? 'broker' : 'web',
       broker_id:            brokerId,
-      broker_code:          data.brokerCode || null,
+      broker_code:          brokerCode,
       broker_name:          brokerName,
       business_name:        data.businessName,
       dba:                  data.dba || null,
