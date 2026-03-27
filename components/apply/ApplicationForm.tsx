@@ -73,7 +73,7 @@ function validateStep(step: number, data: ApplicationData): Partial<Record<keyof
 // Fields that must never be persisted to localStorage (PII)
 const SENSITIVE_FIELDS: ReadonlyArray<keyof ApplicationData> = ['ssnFull', 'dob', 'secondOwnerSsnFull', 'secondOwnerDob']
 
-export default function ApplicationForm() {
+export default function ApplicationForm({ brokerCode }: { brokerCode?: string } = {}) {
   const router = useRouter()
   const [step, setStep] = useState(1)
   const [direction, setDirection] = useState(1)
@@ -156,7 +156,7 @@ export default function ApplicationForm() {
       const res = await fetch('/api/submit', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
+        body: JSON.stringify(brokerCode ? { ...data, brokerCode } : data),
       })
       const json = await res.json()
       if (!res.ok) throw new Error(json.error || 'Submission failed')

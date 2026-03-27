@@ -71,6 +71,8 @@ const ApplicationSchema = z.object({
   signatureName:       str(200),
   authCheck1:          z.literal(true),
   authCheck2:          z.literal(true),
+  // Broker referral (optional)
+  brokerCode:              z.string().max(50).optional(),
   // Second owner (conditional)
   hasSecondOwner:          z.boolean(),
   secondOwnerName:         optStr(200),
@@ -131,6 +133,22 @@ export async function POST(req: NextRequest) {
     const dateStr = now.toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' })
     const timestamp = now.toISOString()
 
+    // ── 2a. Broker lookup (if referral code provided) ─────────────────────
+    let brokerId:   string | null = null
+    let brokerName: string | null = null
+    if (data.brokerCode) {
+      const { data: broker } = await supabase
+        .from('brokers')
+        .select('id, name')
+        .eq('code', data.brokerCode)
+        .eq('active', true)
+        .maybeSingle()
+      if (broker) {
+        brokerId   = broker.id
+        brokerName = broker.name
+      }
+    }
+
     // ── 2. Duplicate EIN check ────────────────────────────────────────────
     const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString()
     const { data: existing } = await supabase
@@ -158,6 +176,10 @@ export async function POST(req: NextRequest) {
       deal_id:              dealId,
       status:               'draft',
       created_at:           timestamp,
+      submitted_by:         brokerId ? 'broker' : 'web',
+      broker_id:            brokerId,
+      broker_code:          data.brokerCode || null,
+      broker_name:          brokerName,
       business_name:        data.businessName,
       dba:                  data.dba || null,
       business_address:     `${data.businessAddress}, ${data.businessCity}, ${data.businessState} ${data.businessZip}`,
