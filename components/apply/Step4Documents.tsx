@@ -54,8 +54,8 @@ export default function Step4Documents({ data, onChange, errors, uploadToken }: 
 
     for (const file of files) {
       // Max 6 bank statements
-      if (urlsRef.current.length >= 6) {
-        setUploadError('Maximum 6 bank statements allowed. Remove a file before adding more.')
+      if (urlsRef.current.length >= 10) {
+        setUploadError('Maximum 10 files allowed. Remove a file before adding more.')
         break
       }
 
@@ -165,10 +165,10 @@ export default function Step4Documents({ data, onChange, errors, uploadToken }: 
         </Field>
       </div>
 
-      {/* Bank Statement Upload */}
+      {/* Document Upload */}
       <div>
         <label className="label">
-          Bank Statements<span style={{ color: '#991B1B', marginLeft: '2px' }}>*</span>
+          Documents<span style={{ color: '#991B1B', marginLeft: '2px' }}>*</span>
         </label>
 
         <motion.div
@@ -214,13 +214,16 @@ export default function Step4Documents({ data, onChange, errors, uploadToken }: 
                 <path d="M20 28V16M14 22l6-6 6 6" stroke={dragOver ? '#C9A84C' : '#9CA3AF'} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
               <p style={{ fontWeight: 600, color: '#0D1B2A', marginBottom: '0.4rem', fontFamily: 'var(--font-ibm, sans-serif)' }}>
-                Upload your bank statements
+                Upload your documents
               </p>
               <p style={{ fontSize: '0.8rem', color: '#6B7280', marginBottom: '0.25rem', fontFamily: 'var(--font-ibm, sans-serif)' }}>
-                Upload 1–6 months of statements. If today is past the 20th, include your current month to date statement.
+                <b>Required:</b> Bank statements (1–6 months). If today is past the 20th, include your current month-to-date statement.
+              </p>
+              <p style={{ fontSize: '0.8rem', color: '#6B7280', marginBottom: '0.25rem', fontFamily: 'var(--font-ibm, sans-serif)' }}>
+                <b>Optional but helpful:</b> Zero balance letters (ZBL), accounts receivable, P&amp;L statements. Not required unless stated otherwise — but any extra info helps us get you better offers.
               </p>
               <p style={{ fontSize: '0.75rem', color: '#9CA3AF', fontFamily: 'var(--font-ibm, sans-serif)' }}>
-                Accepted: PDF, JPG, PNG · Up to 6 files · Click or drag files here
+                Accepted: PDF, JPG, PNG · Up to 10 files · Click or drag files here
               </p>
             </>
           )}
@@ -277,13 +280,13 @@ export default function Step4Documents({ data, onChange, errors, uploadToken }: 
             overflow: 'hidden',
           }}>
             <motion.div
-              animate={{ width: `${Math.min((fileCount / 6) * 100, 100)}%` }}
+              animate={{ width: `${Math.min((fileCount / 10) * 100, 100)}%` }}
               transition={{ duration: 0.4 }}
               style={{ height: '100%', backgroundColor: fileCount >= 1 ? '#1A6B4A' : '#C9A84C', borderRadius: '2px' }}
             />
           </div>
           <span style={{ fontSize: '0.75rem', color: fileCount >= 1 ? '#1A6B4A' : '#6B7280', fontFamily: 'var(--font-ibm, sans-serif)', whiteSpace: 'nowrap', minWidth: '80px' }}>
-            {fileCount} / 6 max
+            {fileCount} / 10 max
           </span>
         </div>
       </div>

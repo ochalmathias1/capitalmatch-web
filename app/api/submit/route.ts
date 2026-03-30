@@ -66,7 +66,7 @@ const ApplicationSchema = z.object({
   // Documents
   openPositions:       z.enum(POSITIONS),
   mcaBalance:          optStr(50),
-  bankStatementUrls:   z.array(urlZ).min(1, 'At least 1 bank statement is required').max(6, 'Maximum 6 bank statements allowed'),
+  bankStatementUrls:   z.array(urlZ).min(1, 'At least 1 document is required').max(10, 'Maximum 10 files allowed'),
   bankStatementNames:  z.array(z.string().max(500)).min(1),
   signatureName:       str(200),
   authCheck1:          z.literal(true),
