@@ -91,12 +91,26 @@ export default function ApplicationForm({ brokerCode }: { brokerCode?: string } 
     } catch {}
   }, [])
 
-  // Fetch a short-lived upload token on mount
+  // Fetch a short-lived upload token on mount + refresh before expiry
   useEffect(() => {
-    fetch('/api/upload-token')
-      .then(r => r.json())
-      .then(j => { if (j.token) setUploadToken(j.token) })
-      .catch(() => {})
+    let timer: ReturnType<typeof setTimeout>
+
+    const fetchToken = () => {
+      fetch('/api/upload-token')
+        .then(r => r.json())
+        .then(j => {
+          if (j.token) setUploadToken(j.token)
+          // Refresh 5 minutes before the 1-hour expiry
+          timer = setTimeout(fetchToken, 55 * 60 * 1000)
+        })
+        .catch(() => {
+          // Retry in 5 seconds on failure
+          timer = setTimeout(fetchToken, 5000)
+        })
+    }
+
+    fetchToken()
+    return () => clearTimeout(timer)
   }, [])
 
   // Save to localStorage on change

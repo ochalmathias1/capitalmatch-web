@@ -67,8 +67,23 @@ export default function Step4Documents({ data, onChange, errors, uploadToken }: 
         form.append('file', file)
         if (uploadToken) form.append('uploadToken', uploadToken)
 
-        const res = await fetch('/api/upload-statement', { method: 'POST', body: form })
-        const json = await res.json()
+        let res = await fetch('/api/upload-statement', { method: 'POST', body: form })
+        let json = await res.json()
+
+        // Auto-retry once on 401 (expired token) — fetch fresh token and resend
+        if (res.status === 401) {
+          try {
+            const tokenRes = await fetch('/api/upload-token')
+            const tokenJson = await tokenRes.json()
+            if (tokenJson.token) {
+              const retryForm = new FormData()
+              retryForm.append('file', file)
+              retryForm.append('uploadToken', tokenJson.token)
+              res = await fetch('/api/upload-statement', { method: 'POST', body: retryForm })
+              json = await res.json()
+            }
+          } catch { /* retry failed, fall through to error handling */ }
+        }
 
         if (!res.ok) {
           const detail = json?.error ?? `HTTP ${res.status}`
