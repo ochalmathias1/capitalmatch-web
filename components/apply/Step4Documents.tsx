@@ -158,9 +158,33 @@ export default function Step4Documents({ data, onChange, errors, uploadToken }: 
           <input
             className="input-field"
             type="text"
-            placeholder="Enter 0 if none"
+            placeholder="$0.00"
             value={data.mcaBalance}
-            onChange={(e) => onChange('mcaBalance', e.target.value)}
+            onChange={(e) => {
+              // Strip non-numeric except decimal, then format as accounting
+              const raw = e.target.value.replace(/[^0-9.]/g, '')
+              const num = parseFloat(raw)
+              if (raw === '' || raw.endsWith('.') || raw.endsWith('.0') || raw.endsWith('.00')) {
+                onChange('mcaBalance', raw ? `$${raw}` : '')
+              } else if (!isNaN(num)) {
+                onChange('mcaBalance', `$${num.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`)
+              }
+            }}
+            onFocus={(e) => {
+              // Strip formatting on focus for easy editing
+              const raw = e.target.value.replace(/[^0-9.]/g, '')
+              if (raw) onChange('mcaBalance', raw)
+            }}
+            onBlur={() => {
+              // Re-apply accounting format on blur
+              const raw = (data.mcaBalance || '').replace(/[^0-9.]/g, '')
+              const num = parseFloat(raw)
+              if (!raw || isNaN(num)) {
+                onChange('mcaBalance', '$0.00')
+              } else {
+                onChange('mcaBalance', `$${num.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`)
+              }
+            }}
           />
         </Field>
       </div>
@@ -216,10 +240,10 @@ export default function Step4Documents({ data, onChange, errors, uploadToken }: 
               <p style={{ fontWeight: 600, color: '#0D1B2A', marginBottom: '0.4rem', fontFamily: 'var(--font-ibm, sans-serif)' }}>
                 Upload your documents
               </p>
-              <p style={{ fontSize: '0.8rem', color: '#6B7280', marginBottom: '0.25rem', fontFamily: 'var(--font-ibm, sans-serif)' }}>
+              <p style={{ fontSize: '0.8rem', color: '#0D1B2A', marginBottom: '0.25rem', fontFamily: 'var(--font-ibm, sans-serif)' }}>
                 <b>Required:</b> Bank statements (1–6 months). If today is past the 20th, include your current month-to-date statement.
               </p>
-              <p style={{ fontSize: '0.8rem', color: '#6B7280', marginBottom: '0.25rem', fontFamily: 'var(--font-ibm, sans-serif)' }}>
+              <p style={{ fontSize: '0.8rem', color: '#0D1B2A', marginBottom: '0.25rem', fontFamily: 'var(--font-ibm, sans-serif)' }}>
                 <b>Optional but helpful:</b> Zero balance letters (ZBL), accounts receivable, P&amp;L statements. Not required unless stated otherwise — but any extra info helps us get you better offers.
               </p>
               <p style={{ fontSize: '0.75rem', color: '#9CA3AF', fontFamily: 'var(--font-ibm, sans-serif)' }}>
