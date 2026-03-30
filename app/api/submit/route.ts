@@ -177,7 +177,7 @@ export async function POST(req: NextRequest) {
       deal_id:              dealId,
       status:               'draft',
       created_at:           timestamp,
-      submitted_by:         brokerId ? 'broker' : 'web',
+      submitted_by:         brokerId ? 'broker' : 'CMF Website',
       broker_id:            brokerId,
       broker_code:          brokerCode,
       broker_name:          brokerName,
