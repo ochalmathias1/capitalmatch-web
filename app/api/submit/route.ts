@@ -141,7 +141,7 @@ export async function POST(req: NextRequest) {
       const { data: broker } = await supabase
         .from('brokers')
         .select('id, name')
-        .eq('code', brokerCode)
+        .eq('referral_code', brokerCode)
         .eq('active', true)
         .maybeSingle()
       if (broker) {
