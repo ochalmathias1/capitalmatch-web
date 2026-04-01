@@ -6,6 +6,9 @@ const ALLOWED_MIME_TYPES  = new Set(['application/pdf', 'image/jpeg', 'image/png
 const ALLOWED_EXTENSIONS  = new Set(['pdf', 'jpg', 'jpeg', 'png'])
 const MAX_FILE_SIZE_BYTES = 10 * 1024 * 1024  // 10 MB
 
+// Increase Vercel serverless function timeout
+export const maxDuration = 30 // seconds
+
 export async function POST(req: NextRequest) {
   try {
     const formData = await req.formData()

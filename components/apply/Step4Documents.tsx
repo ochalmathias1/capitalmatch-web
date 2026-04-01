@@ -87,8 +87,13 @@ export default function Step4Documents({ data, onChange, errors, uploadToken }: 
 
         if (!res.ok) {
           const detail = json?.error ?? `HTTP ${res.status}`
-          console.error(`[upload] Failed for ${file.name}:`, json)
-          setUploadError(`Failed to upload ${file.name}: ${detail}`)
+          const sizeMB = (file.size / 1024 / 1024).toFixed(1)
+          console.error(`[upload] Failed for ${file.name} (${sizeMB}MB, type=${file.type}):`, json)
+          if (file.size > 10 * 1024 * 1024) {
+            setUploadError(`${file.name} is too large (${sizeMB}MB). Maximum file size is 10MB.`)
+          } else {
+            setUploadError(`Failed to upload ${file.name}: ${detail}`)
+          }
           continue
         }
 
