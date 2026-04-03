@@ -19,7 +19,7 @@ export default async function BrokerApplyPage({
   return (
     <>
       <Navigation />
-      <main style={{ paddingTop: '72px', minHeight: '100vh', backgroundColor: '#FAFAFA' }}>
+      <main style={{ paddingTop: '72px', minHeight: '100vh', backgroundColor: '#F8F4ED' }}>
         <div style={{
           backgroundColor: '#0D1B2A',
           padding: '3rem 1.5rem 2.5rem',

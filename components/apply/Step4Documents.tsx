@@ -258,6 +258,15 @@ export default function Step4Documents({ data, onChange, errors, uploadToken }: 
           )}
         </motion.div>
 
+        {/* Security Badge */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginTop: '0.75rem' }}>
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+            <path d="M7 1L2 3.5V6.5C2 9.75 4.1 12.7 7 13.5C9.9 12.7 12 9.75 12 6.5V3.5L7 1Z" stroke="#1A6B4A" strokeWidth="1.2" fill="none"/>
+            <path d="M5 7L6.5 8.5L9 5.5" stroke="#1A6B4A" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+          <span className="trust-badge">256-bit encrypted · Your data is secure</span>
+        </div>
+
         {/* File list */}
         <AnimatePresence>
           {(data.bankStatementNames || []).map((name, i) => (

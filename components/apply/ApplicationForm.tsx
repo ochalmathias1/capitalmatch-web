@@ -205,7 +205,27 @@ export default function ApplicationForm({ brokerCode }: { brokerCode?: string } 
     !submitting
 
   return (
-    <div style={{ maxWidth: '760px', margin: '0 auto', padding: '0 1.5rem 4rem' }}>
+    <div style={{ maxWidth: '760px', margin: '0 auto', padding: '0 1.5rem 4rem', position: 'relative' }}>
+      {/* Submitting overlay */}
+      <AnimatePresence>
+        {submitting && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            style={{
+              position: 'absolute', inset: 0, zIndex: 50,
+              display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+              backgroundColor: 'rgba(248, 244, 237, 0.92)', borderRadius: '1rem',
+            }}
+          >
+            <div style={{ width: '48px', height: '48px', borderRadius: '50%', border: '3px solid #E5E7EB', borderTopColor: '#C9A84C', animation: 'spin 0.8s linear infinite', marginBottom: '1.5rem' }} />
+            <p style={{ fontFamily: 'var(--font-playfair, serif)', fontSize: '1.25rem', fontWeight: 700, color: '#0D1B2A', marginBottom: '0.5rem' }}>Processing your application...</p>
+            <p style={{ fontSize: '0.875rem', color: '#6B7280', fontFamily: 'var(--font-ibm, sans-serif)' }}>This usually takes a few seconds.</p>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       <ProgressBar currentStep={displayStep} totalSteps={totalSteps} />
 
       <div style={{ marginBottom: '2rem' }}>
@@ -293,7 +313,7 @@ export default function ApplicationForm({ brokerCode }: { brokerCode?: string } 
                     display: 'inline-block',
                     animation: 'spin 0.7s linear infinite',
                   }} />
-                  Submitting...
+                  Processing your application...
                 </span>
               ) : 'Submit My Application →'}
             </motion.button>
