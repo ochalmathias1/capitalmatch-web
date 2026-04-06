@@ -27,7 +27,7 @@ export default function Image() {
         Fast Business Funding · No Broker Fees
       </div>
       <div style={{ fontSize: '20px', color: 'rgba(255,255,255,0.6)', textAlign: 'center', maxWidth: '700px' }}>
-        One application reaches 40+ private lenders. All industries. Bad credit options. Apply free.
+        One application reaches community of private lenders. All industries. Bad credit options. Apply free.
       </div>
       <div style={{ marginTop: '48px', fontSize: '16px', color: '#C9A84C', letterSpacing: '0.12em' }}>
         capitalmatchfunding.com

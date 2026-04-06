@@ -15,7 +15,7 @@ export default function Hero() {
     'No broker fees ever',
     'No hard credit check',
     'Results in 24 hours',
-    '40+ private lenders',
+    'community of private lenders',
     'All industries welcome',
     'Bad credit options available',
   ]

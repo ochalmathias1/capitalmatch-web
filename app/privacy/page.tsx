@@ -71,7 +71,7 @@ export default function PrivacyPage() {
               },
               {
                 title: '11. Contact Us',
-                content: `For privacy-related questions or to exercise your rights, contact us at: CapitalMatch, privacy@capitalmatchfunding.com. For general inquiries: support@capitalmatchfunding.com.`,
+                content: `For privacy-related questions or to exercise your rights, contact us at: CapitalMatch, privacy@capitalmatchfunding.com. For general inquiries: lenders@capitalmatchfunding.com.`,
               },
             ].map(({ title, content }) => (
               <div key={title} style={{ marginBottom: '2rem' }}>

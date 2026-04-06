@@ -140,8 +140,8 @@ function ConfirmationContent() {
 
           <p style={{ fontSize: '0.875rem', color: '#6B7280', fontFamily: 'var(--font-ibm, sans-serif)', marginBottom: '2rem' }}>
             Questions? Email us at{' '}
-            <a href="mailto:support@capitalmatchfunding.com" style={{ color: '#C9A84C' }}>
-              support@capitalmatchfunding.com
+            <a href="mailto:lenders@capitalmatchfunding.com" style={{ color: '#C9A84C' }}>
+              lenders@capitalmatchfunding.com
             </a>
           </p>
 

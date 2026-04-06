@@ -20,7 +20,7 @@ const benefits = [
       </svg>
     ),
     title: 'Direct Lender Access',
-    desc: 'One application reaches 40+ private lenders simultaneously. No gatekeepers. No markup.',
+    desc: 'One application reaches community of private lenders simultaneously. No gatekeepers. No markup.',
   },
   {
     icon: (

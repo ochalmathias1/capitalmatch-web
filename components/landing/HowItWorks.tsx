@@ -17,7 +17,7 @@ const steps = [
   {
     number: '02',
     title: 'We Match You Instantly',
-    desc: 'Your application goes to our entire lender network at once. No middlemen. No markup. Direct access to 40+ lenders.',
+    desc: 'Your application goes to our entire lender network at once. No middlemen. No markup. Direct access to community of lenders.',
     icon: (
       <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
         <circle cx="16" cy="16" r="12" stroke="#C9A84C" strokeWidth="1.8"/>

@@ -28,7 +28,7 @@ export const metadata: Metadata = {
     template: '%s | CapitalMatch',
     default: 'CapitalMatch — Fast Business Funding | No Broker Fees',
   },
-  description: 'Get funded in 24 hours with zero broker fees. One application reaches 40+ private lenders. All industries. Bad credit options available. Apply free today.',
+  description: 'Get funded in 24 hours with zero broker fees. One application reaches community of private lenders. All industries. Bad credit options available. Apply free today.',
   keywords: [
     'merchant cash advance',
     'business funding',

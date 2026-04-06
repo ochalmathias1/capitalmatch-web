@@ -199,8 +199,8 @@ export default function FAQPage() {
             </h2>
             <p style={{ color: 'rgba(255,255,255,0.65)', fontSize: '1rem', marginBottom: '2rem', fontFamily: 'var(--font-ibm, sans-serif)', lineHeight: 1.7 }}>
               Email us at{' '}
-              <a href="mailto:support@capitalmatchfunding.com" style={{ color: '#C9A84C', textDecoration: 'none' }}>
-                support@capitalmatchfunding.com
+              <a href="mailto:lenders@capitalmatchfunding.com" style={{ color: '#C9A84C', textDecoration: 'none' }}>
+                lenders@capitalmatchfunding.com
               </a>
               {' '}— we respond the same business day.
             </p>
