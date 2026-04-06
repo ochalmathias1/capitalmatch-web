@@ -7,17 +7,21 @@ export default function Logo({ size = 'md', light = false }: {
 }) {
   const heights = { sm: 36, md: 48, lg: 64 }
   const h = heights[size]
-  // header logo aspect ratio is roughly 2.3:1
-  const w = Math.round(h * 2.3)
 
   return (
     <Link href="/" style={{ display: 'inline-flex', alignItems: 'center', textDecoration: 'none' }}>
       <Image
-        src={light ? '/logo-white.png' : '/logo-header.png'}
+        src={light ? '/logo-white.png' : '/logo-dark.png'}
         alt="Capital Match Funding — Est. New York"
-        height={h}
-        width={w}
-        style={{ objectFit: 'contain', objectPosition: 'left center', height: h, width: 'auto' }}
+        height={h * 2}
+        width={h * 8}
+        style={{
+          objectFit: 'contain',
+          objectPosition: 'left center',
+          height: h,
+          width: 'auto',
+          maxWidth: h * 4,
+        }}
         priority
       />
     </Link>
