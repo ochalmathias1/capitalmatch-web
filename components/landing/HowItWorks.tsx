@@ -2,6 +2,13 @@
 import { motion, useInView, useReducedMotion } from 'framer-motion'
 import { useRef } from 'react'
 
+const stats = [
+  { icon: '🏦', text: 'Trusted by businesses across every industry' },
+  { icon: '⚡', text: 'Applications processed in minutes' },
+  { icon: '🔒', text: 'Bank-level security on all data' },
+  { icon: '📞', text: 'Live support from real humans' },
+]
+
 const steps = [
   {
     number: '01',
@@ -106,10 +113,11 @@ export default function HowItWorks() {
   const reduced = useReducedMotion()
   const headRef = useRef(null)
   const headInView = useInView(headRef, { once: true })
+  const statsRef = useRef(null)
+  const statsInView = useInView(statsRef, { once: true })
 
   return (
     <section id="how-it-works" style={{
-      padding: 'clamp(4rem, 8vw, 7rem) 1.5rem',
       position: 'relative',
       overflow: 'hidden',
     }}>
@@ -123,55 +131,71 @@ export default function HowItWorks() {
       {/* Dark overlay */}
       <div style={{
         position: 'absolute', inset: 0,
-        background: 'linear-gradient(180deg, rgba(13,27,42,0.93) 0%, rgba(13,27,42,0.88) 100%)',
+        background: 'rgba(13,27,42,0.92)',
       }} />
-      {/* Top fade — blend from cream into dark */}
-      <div style={{
-        position: 'absolute', top: 0, left: 0, right: 0, height: '80px',
-        background: 'linear-gradient(to bottom, #F8F4ED 0%, transparent 100%)',
-        zIndex: 1, pointerEvents: 'none',
-      }} />
-      {/* Bottom fade — blend from dark into next section */}
-      <div style={{
-        position: 'absolute', bottom: 0, left: 0, right: 0, height: '80px',
-        background: 'linear-gradient(to top, #F8F4ED 0%, transparent 100%)',
-        zIndex: 1, pointerEvents: 'none',
-      }} />
-      <div style={{ maxWidth: '1200px', margin: '0 auto', position: 'relative', zIndex: 1 }}>
-        <div ref={headRef} style={{ textAlign: 'center', marginBottom: '4rem' }}>
-          <motion.p
-            initial={reduced ? {} : { opacity: 0, y: 16 }}
-            animate={headInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.4 }}
-            style={{ fontSize: '0.78rem', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#C9A84C', marginBottom: '1rem', fontFamily: 'var(--font-ibm, sans-serif)' }}
-          >
-            Simple Process
-          </motion.p>
-          <motion.h2
-            initial={reduced ? {} : { opacity: 0, y: 20 }}
-            animate={headInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.5, delay: 0.1 }}
-            style={{ fontFamily: 'var(--font-playfair, serif)', fontSize: 'clamp(2rem, 4vw, 3rem)', fontWeight: 800, color: '#FFFFFF', lineHeight: 1.2 }}
-          >
-            Funding Simplified to 4 Steps
-          </motion.h2>
+
+      <div style={{ position: 'relative', zIndex: 1 }}>
+        {/* Stats bar — top of the dark section */}
+        <div ref={statsRef} style={{
+          maxWidth: '1200px', margin: '0 auto',
+          padding: '3rem 1.5rem',
+          borderBottom: '1px solid rgba(201,168,76,0.12)',
+        }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1.5rem 2rem' }}>
+            {stats.map((item, i) => (
+              <motion.div
+                key={i}
+                initial={reduced ? {} : { opacity: 0, y: 16 }}
+                animate={statsInView ? { opacity: 1, y: 0 } : {}}
+                transition={{ duration: 0.4, delay: i * 0.08 }}
+                style={{ display: 'flex', alignItems: 'center', gap: '0.875rem' }}
+              >
+                <span style={{ fontSize: '1.5rem', flexShrink: 0 }}>{item.icon}</span>
+                <p style={{ fontSize: '0.9rem', color: 'rgba(255,255,255,0.75)', fontFamily: 'var(--font-ibm, sans-serif)', fontWeight: 500, lineHeight: 1.4 }}>
+                  {item.text}
+                </p>
+              </motion.div>
+            ))}
+          </div>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.5rem' }}>
-          {steps.map((s, i) => <Step key={s.number} step={s} index={i} />)}
-        </div>
+        {/* Steps content */}
+        <div style={{ maxWidth: '1200px', margin: '0 auto', padding: 'clamp(4rem, 8vw, 6rem) 1.5rem' }}>
+          <div ref={headRef} style={{ textAlign: 'center', marginBottom: '4rem' }}>
+            <motion.p
+              initial={reduced ? {} : { opacity: 0, y: 16 }}
+              animate={headInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.4 }}
+              style={{ fontSize: '0.78rem', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#C9A84C', marginBottom: '1rem', fontFamily: 'var(--font-ibm, sans-serif)' }}
+            >
+              Simple Process
+            </motion.p>
+            <motion.h2
+              initial={reduced ? {} : { opacity: 0, y: 20 }}
+              animate={headInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.5, delay: 0.1 }}
+              style={{ fontFamily: 'var(--font-playfair, serif)', fontSize: 'clamp(2rem, 4vw, 3rem)', fontWeight: 800, color: '#FFFFFF', lineHeight: 1.2 }}
+            >
+              Funding Simplified to 4 Steps
+            </motion.h2>
+          </div>
 
-        {/* CTA below steps */}
-        <div style={{ textAlign: 'center', marginTop: '3.5rem' }}>
-          <a href="/apply" style={{
-            display: 'inline-flex', alignItems: 'center', gap: '0.5rem',
-            padding: '1rem 2.5rem',
-            backgroundColor: '#C9A84C', color: '#0D1B2A',
-            borderRadius: '8px', fontWeight: 700, fontSize: '1rem',
-            fontFamily: 'var(--font-ibm, sans-serif)', textDecoration: 'none',
-          }}>
-            Start My Application
-          </a>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.5rem' }}>
+            {steps.map((s, i) => <Step key={s.number} step={s} index={i} />)}
+          </div>
+
+          {/* CTA */}
+          <div style={{ textAlign: 'center', marginTop: '3.5rem' }}>
+            <a href="/apply" style={{
+              display: 'inline-flex', alignItems: 'center', gap: '0.5rem',
+              padding: '1rem 2.5rem',
+              backgroundColor: '#C9A84C', color: '#0D1B2A',
+              borderRadius: '8px', fontWeight: 700, fontSize: '1rem',
+              fontFamily: 'var(--font-ibm, sans-serif)', textDecoration: 'none',
+            }}>
+              Start My Application
+            </a>
+          </div>
         </div>
       </div>
     </section>

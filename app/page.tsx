@@ -2,7 +2,6 @@ import type { Metadata } from 'next'
 import Navigation from '@/components/Navigation'
 import Hero from '@/components/landing/Hero'
 import Mission from '@/components/landing/Mission'
-import StatsBanner from '@/components/landing/StatsBanner'
 import HowItWorks from '@/components/landing/HowItWorks'
 import WhyCapitalMatch from '@/components/landing/WhyCapitalMatch'
 import Reviews from '@/components/landing/Reviews'
@@ -64,7 +63,6 @@ export default function Home() {
       <main>
         <Hero />
         <Mission />
-        <StatsBanner />
         <HowItWorks />
         <WhyCapitalMatch />
         <Reviews />
