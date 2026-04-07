@@ -65,9 +65,9 @@ function Step({ step, index }: { step: typeof steps[0], index: number }) {
   return (
     <motion.div
       ref={ref}
-      initial={reduced ? {} : { opacity: 0, y: 40 }}
-      animate={inView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.55, delay: index * 0.1 }}
+      initial={reduced ? {} : { opacity: 0, y: 50, scale: 0.95 }}
+      animate={inView ? { opacity: 1, y: 0, scale: 1 } : {}}
+      transition={{ duration: 0.7, delay: index * 0.15, ease: [0.25, 0.46, 0.45, 0.94] }}
       style={{
         display: 'flex',
         gap: '1.5rem',
@@ -117,30 +117,28 @@ export default function HowItWorks() {
   const statsInView = useInView(statsRef, { once: true })
 
   const sectionRef = useRef(null)
-  const sectionInView = useInView(sectionRef, { once: true, margin: '-100px' })
+  const sectionInView = useInView(sectionRef, { once: true, margin: '0px' })
 
   return (
     <>
-      {/* Gold divider line — marks the transition */}
-      <div style={{ display: 'flex', justifyContent: 'center', padding: '0' }}>
+      {/* Gold divider line — expands on scroll */}
+      <div ref={sectionRef} style={{ display: 'flex', justifyContent: 'center', padding: '2rem 0' }}>
         <motion.div
-          ref={sectionRef}
           initial={{ width: 0, opacity: 0 }}
-          animate={sectionInView ? { width: '120px', opacity: 1 } : {}}
-          transition={{ duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
+          animate={sectionInView ? { width: '60%', opacity: 1 } : {}}
+          transition={{ duration: 1.2, ease: [0.25, 0.46, 0.45, 0.94] }}
           style={{
-            height: '2px',
-            background: 'linear-gradient(90deg, transparent, #C9A84C, transparent)',
-            borderRadius: '1px',
+            height: '1px',
+            background: 'linear-gradient(90deg, transparent 0%, #C9A84C 30%, #C9A84C 70%, transparent 100%)',
           }}
         />
       </div>
 
       <motion.section
         id="how-it-works"
-        initial={reduced ? {} : { opacity: 0, y: 60 }}
-        animate={sectionInView ? { opacity: 1, y: 0 } : {}}
-        transition={{ duration: 0.7, delay: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }}
+        initial={reduced ? {} : { opacity: 0 }}
+        animate={sectionInView ? { opacity: 1 } : {}}
+        transition={{ duration: 1, delay: 0.4, ease: 'easeOut' }}
         style={{
           position: 'relative',
           overflow: 'hidden',
@@ -170,9 +168,9 @@ export default function HowItWorks() {
             {stats.map((item, i) => (
               <motion.div
                 key={i}
-                initial={reduced ? {} : { opacity: 0, y: 16 }}
+                initial={reduced ? {} : { opacity: 0, y: 30 }}
                 animate={statsInView ? { opacity: 1, y: 0 } : {}}
-                transition={{ duration: 0.4, delay: i * 0.08 }}
+                transition={{ duration: 0.6, delay: 0.6 + i * 0.15 }}
                 style={{ display: 'flex', alignItems: 'center', gap: '0.875rem' }}
               >
                 <span style={{ fontSize: '1.5rem', flexShrink: 0 }}>{item.icon}</span>
