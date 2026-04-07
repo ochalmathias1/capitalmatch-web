@@ -38,9 +38,9 @@ export default function Navigation() {
           left: 0,
           right: 0,
           zIndex: 50,
-          backgroundColor: scrolled ? 'rgba(13,27,42,0.97)' : 'rgba(13,27,42,0.85)',
-          backdropFilter: 'blur(12px)',
-          borderBottom: scrolled ? '1px solid rgba(201,168,76,0.15)' : '1px solid rgba(255,255,255,0.05)',
+          backgroundColor: scrolled ? 'rgba(13,27,42,0.95)' : 'transparent',
+          backdropFilter: scrolled ? 'blur(12px)' : 'none',
+          borderBottom: scrolled ? '1px solid rgba(201,168,76,0.15)' : 'none',
           transition: 'all 0.3s ease',
         }}
       >
