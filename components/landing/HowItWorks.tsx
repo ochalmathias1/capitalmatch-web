@@ -116,23 +116,48 @@ export default function HowItWorks() {
   const statsRef = useRef(null)
   const statsInView = useInView(statsRef, { once: true })
 
+  const sectionRef = useRef(null)
+  const sectionInView = useInView(sectionRef, { once: true, margin: '-100px' })
+
   return (
-    <section id="how-it-works" style={{
-      position: 'relative',
-      overflow: 'hidden',
-    }}>
-      {/* Background image */}
-      <div style={{
-        position: 'absolute', inset: 0,
-        backgroundImage: 'url(/bridge-cables.jpg)',
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-      }} />
-      {/* Dark overlay */}
-      <div style={{
-        position: 'absolute', inset: 0,
-        background: 'rgba(13,27,42,0.92)',
-      }} />
+    <>
+      {/* Gold divider line — marks the transition */}
+      <div style={{ display: 'flex', justifyContent: 'center', padding: '0' }}>
+        <motion.div
+          ref={sectionRef}
+          initial={{ width: 0, opacity: 0 }}
+          animate={sectionInView ? { width: '120px', opacity: 1 } : {}}
+          transition={{ duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
+          style={{
+            height: '2px',
+            background: 'linear-gradient(90deg, transparent, #C9A84C, transparent)',
+            borderRadius: '1px',
+          }}
+        />
+      </div>
+
+      <motion.section
+        id="how-it-works"
+        initial={reduced ? {} : { opacity: 0, y: 60 }}
+        animate={sectionInView ? { opacity: 1, y: 0 } : {}}
+        transition={{ duration: 0.7, delay: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }}
+        style={{
+          position: 'relative',
+          overflow: 'hidden',
+        }}
+      >
+        {/* Background image */}
+        <div style={{
+          position: 'absolute', inset: 0,
+          backgroundImage: 'url(/bridge-cables.jpg)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+        }} />
+        {/* Dark overlay */}
+        <div style={{
+          position: 'absolute', inset: 0,
+          background: 'rgba(13,27,42,0.92)',
+        }} />
 
       <div style={{ position: 'relative', zIndex: 1 }}>
         {/* Stats bar — top of the dark section */}
@@ -198,6 +223,7 @@ export default function HowItWorks() {
           </div>
         </div>
       </div>
-    </section>
+    </motion.section>
+    </>
   )
 }
