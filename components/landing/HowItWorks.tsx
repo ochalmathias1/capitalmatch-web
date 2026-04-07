@@ -66,8 +66,9 @@ function Step({ step, index }: { step: typeof steps[0], index: number }) {
         gap: '1.5rem',
         padding: '2rem',
         borderRadius: '12px',
-        border: '1px solid #E5E7EB',
-        background: '#FFFFFF',
+        border: '1px solid rgba(201,168,76,0.2)',
+        background: 'rgba(13,27,42,0.6)',
+        backdropFilter: 'blur(8px)',
         position: 'relative',
         overflow: 'hidden',
       }}
@@ -87,11 +88,11 @@ function Step({ step, index }: { step: typeof steps[0], index: number }) {
           <span style={{ fontFamily: 'var(--font-playfair, serif)', fontSize: '0.85rem', fontWeight: 700, color: 'rgba(201,168,76,0.6)', letterSpacing: '0.05em' }}>
             {step.number}
           </span>
-          <h3 style={{ fontFamily: 'var(--font-playfair, serif)', fontSize: '1.2rem', fontWeight: 700, color: '#0D1B2A' }}>
+          <h3 style={{ fontFamily: 'var(--font-playfair, serif)', fontSize: '1.2rem', fontWeight: 700, color: '#FFFFFF' }}>
             {step.title}
           </h3>
         </div>
-        <p style={{ fontSize: '0.9rem', color: '#6B7280', lineHeight: 1.7, fontFamily: 'var(--font-ibm, sans-serif)' }}>
+        <p style={{ fontSize: '0.9rem', color: 'rgba(255,255,255,0.7)', lineHeight: 1.7, fontFamily: 'var(--font-ibm, sans-serif)' }}>
           {step.desc}
         </p>
       </div>
@@ -107,8 +108,24 @@ export default function HowItWorks() {
   const headInView = useInView(headRef, { once: true })
 
   return (
-    <section id="how-it-works" style={{ backgroundColor: '#F9FAFB', padding: 'clamp(4rem, 8vw, 7rem) 1.5rem' }}>
-      <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+    <section id="how-it-works" style={{
+      padding: 'clamp(4rem, 8vw, 7rem) 1.5rem',
+      position: 'relative',
+      overflow: 'hidden',
+    }}>
+      {/* Background image */}
+      <div style={{
+        position: 'absolute', inset: 0,
+        backgroundImage: 'url(/bridge-cables.jpg)',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+      }} />
+      {/* Dark overlay */}
+      <div style={{
+        position: 'absolute', inset: 0,
+        background: 'linear-gradient(180deg, rgba(13,27,42,0.93) 0%, rgba(13,27,42,0.88) 100%)',
+      }} />
+      <div style={{ maxWidth: '1200px', margin: '0 auto', position: 'relative', zIndex: 1 }}>
         <div ref={headRef} style={{ textAlign: 'center', marginBottom: '4rem' }}>
           <motion.p
             initial={reduced ? {} : { opacity: 0, y: 16 }}
@@ -122,7 +139,7 @@ export default function HowItWorks() {
             initial={reduced ? {} : { opacity: 0, y: 20 }}
             animate={headInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.5, delay: 0.1 }}
-            style={{ fontFamily: 'var(--font-playfair, serif)', fontSize: 'clamp(2rem, 4vw, 3rem)', fontWeight: 800, color: '#0D1B2A', lineHeight: 1.2 }}
+            style={{ fontFamily: 'var(--font-playfair, serif)', fontSize: 'clamp(2rem, 4vw, 3rem)', fontWeight: 800, color: '#FFFFFF', lineHeight: 1.2 }}
           >
             Funding Simplified to 4 Steps
           </motion.h2>
