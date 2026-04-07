@@ -15,7 +15,7 @@ export default function Hero() {
     'No broker fees ever',
     'No hard credit check',
     'Results in 24 hours',
-    'community of private lenders',
+    'Community of private lenders',
     'All industries welcome',
     'Bad credit options available',
   ]
@@ -28,38 +28,38 @@ export default function Hero() {
         display: 'flex',
         alignItems: 'center',
         paddingTop: '72px',
-        backgroundColor: '#0D1B2A',
         position: 'relative',
         overflow: 'hidden',
       }}
     >
-      {/* Animated gradient orbs */}
-      <motion.div
-        animate={reduced ? {} : { scale: [1, 1.15, 1], opacity: [0.4, 0.6, 0.4] }}
-        transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
-        style={{
-          position: 'absolute', top: '-10%', right: '-5%',
-          width: '600px', height: '600px', borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(201,168,76,0.12) 0%, transparent 70%)',
-          pointerEvents: 'none',
-        }}
-      />
-      <motion.div
-        animate={reduced ? {} : { scale: [1, 1.2, 1], opacity: [0.3, 0.5, 0.3] }}
-        transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut', delay: 2 }}
-        style={{
-          position: 'absolute', bottom: '-20%', left: '-10%',
-          width: '700px', height: '700px', borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(201,168,76,0.08) 0%, transparent 70%)',
-          pointerEvents: 'none',
-        }}
-      />
-      {/* Grid lines overlay */}
+      {/* Bridge background image */}
       <div style={{
-        position: 'absolute', inset: 0, pointerEvents: 'none',
-        backgroundImage: 'linear-gradient(rgba(201,168,76,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(201,168,76,0.04) 1px, transparent 1px)',
-        backgroundSize: '60px 60px',
+        position: 'absolute',
+        inset: 0,
+        backgroundImage: 'url(/hero-bridge.jpg)',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center 30%',
+        backgroundRepeat: 'no-repeat',
       }} />
+
+      {/* Dark overlay — navy gradient for text readability */}
+      <div style={{
+        position: 'absolute',
+        inset: 0,
+        background: 'linear-gradient(135deg, rgba(13,27,42,0.92) 0%, rgba(13,27,42,0.82) 40%, rgba(13,27,42,0.7) 100%)',
+      }} />
+
+      {/* Subtle gold glow at top right */}
+      <motion.div
+        animate={reduced ? {} : { opacity: [0.3, 0.5, 0.3] }}
+        transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
+        style={{
+          position: 'absolute', top: '-5%', right: '-5%',
+          width: '500px', height: '500px', borderRadius: '50%',
+          background: 'radial-gradient(circle, rgba(201,168,76,0.15) 0%, transparent 70%)',
+          pointerEvents: 'none',
+        }}
+      />
 
       <div style={{ maxWidth: '1200px', margin: '0 auto', padding: 'clamp(3rem, 8vw, 6rem) 1.5rem', width: '100%', position: 'relative', zIndex: 1 }}>
         {/* Badge */}
@@ -68,6 +68,7 @@ export default function Hero() {
             display: 'inline-flex', alignItems: 'center', gap: '0.5rem',
             backgroundColor: 'rgba(201,168,76,0.1)', border: '1px solid rgba(201,168,76,0.3)',
             borderRadius: '100px', padding: '0.4rem 1rem', marginBottom: '1.75rem',
+            backdropFilter: 'blur(8px)',
           }}>
             <div style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: '#C9A84C' }} />
             <span style={{ fontSize: '0.78rem', fontWeight: 600, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#C9A84C', fontFamily: 'var(--font-ibm, sans-serif)' }}>
@@ -80,11 +81,12 @@ export default function Hero() {
         <motion.h1 {...fadeUp(0.2)} style={{
           fontFamily: 'var(--font-playfair, serif)',
           fontSize: 'clamp(2.4rem, 6vw, 4.5rem)',
-          fontWeight: 800,
+          fontWeight: 700,
           lineHeight: 1.1,
           color: '#FFFFFF',
           marginBottom: '1.5rem',
           maxWidth: '800px',
+          textShadow: '0 2px 20px rgba(0,0,0,0.3)',
         }}>
           Fast Capital.{' '}
           <span style={{ color: '#C9A84C' }}>Zero Broker Fees.</span>
@@ -94,11 +96,12 @@ export default function Hero() {
         {/* Subheadline */}
         <motion.p {...fadeUp(0.3)} style={{
           fontSize: 'clamp(1rem, 2vw, 1.2rem)',
-          color: 'rgba(255,255,255,0.7)',
+          color: 'rgba(255,255,255,0.8)',
           lineHeight: 1.75,
           marginBottom: '2.5rem',
           maxWidth: '580px',
           fontFamily: 'var(--font-ibm, sans-serif)',
+          textShadow: '0 1px 8px rgba(0,0,0,0.2)',
         }}>
           Most business owners get passed around by brokers who take a cut of everything. We cut them out entirely.
           One application reaches our entire lender network — and you keep every dollar.
@@ -130,14 +133,15 @@ export default function Hero() {
             style={{
               display: 'inline-flex', alignItems: 'center', gap: '0.5rem',
               padding: '1rem 2rem',
-              backgroundColor: 'transparent', color: '#FFFFFF',
-              border: '1.5px solid rgba(255,255,255,0.3)', borderRadius: '8px',
+              backgroundColor: 'rgba(255,255,255,0.05)', color: '#FFFFFF',
+              border: '1.5px solid rgba(255,255,255,0.25)', borderRadius: '8px',
               fontWeight: 600, fontSize: '1rem',
               fontFamily: 'var(--font-ibm, sans-serif)', cursor: 'pointer',
               transition: 'all 0.2s',
+              backdropFilter: 'blur(4px)',
             }}
             onMouseEnter={e => { e.currentTarget.style.borderColor = '#C9A84C'; e.currentTarget.style.color = '#C9A84C' }}
-            onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.3)'; e.currentTarget.style.color = '#FFFFFF' }}
+            onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.25)'; e.currentTarget.style.color = '#FFFFFF' }}
           >
             See How It Works
           </button>
@@ -159,7 +163,7 @@ export default function Hero() {
                     <path d="M2 5l2 2 4-4" stroke="#C9A84C" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
                   </svg>
                 </div>
-                <span style={{ fontSize: '0.82rem', color: 'rgba(255,255,255,0.65)', fontFamily: 'var(--font-ibm, sans-serif)', fontWeight: 500 }}>
+                <span style={{ fontSize: '0.82rem', color: 'rgba(255,255,255,0.75)', fontFamily: 'var(--font-ibm, sans-serif)', fontWeight: 500 }}>
                   {item}
                 </span>
               </div>
