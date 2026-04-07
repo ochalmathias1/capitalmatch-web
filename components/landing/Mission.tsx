@@ -38,7 +38,7 @@ export default function Mission() {
   ]
 
   return (
-    <section style={{ backgroundColor: '#FFFFFF', padding: 'clamp(4rem, 8vw, 7rem) 1.5rem' }}>
+    <section style={{ backgroundColor: '#F8F4ED', padding: 'clamp(4rem, 8vw, 7rem) 1.5rem' }}>
       <div ref={sectionRef} style={{ maxWidth: '900px', margin: '0 auto', textAlign: 'center' }}>
         <motion.div
           initial={reduced ? {} : { opacity: 0, y: 30 }}
