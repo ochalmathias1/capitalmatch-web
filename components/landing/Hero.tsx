@@ -49,6 +49,17 @@ export default function Hero() {
         background: 'linear-gradient(135deg, rgba(13,27,42,0.92) 0%, rgba(13,27,42,0.82) 40%, rgba(13,27,42,0.7) 100%)',
       }} />
 
+      {/* Bottom fade — smooth transition into cream section below */}
+      <div style={{
+        position: 'absolute',
+        bottom: 0,
+        left: 0,
+        right: 0,
+        height: '180px',
+        background: 'linear-gradient(to bottom, transparent 0%, #F8F4ED 100%)',
+        pointerEvents: 'none',
+      }} />
+
       {/* Subtle gold glow at top right */}
       <motion.div
         animate={reduced ? {} : { opacity: [0.3, 0.5, 0.3] }}
