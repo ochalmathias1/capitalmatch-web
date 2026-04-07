@@ -125,6 +125,18 @@ export default function HowItWorks() {
         position: 'absolute', inset: 0,
         background: 'linear-gradient(180deg, rgba(13,27,42,0.93) 0%, rgba(13,27,42,0.88) 100%)',
       }} />
+      {/* Top fade — blend from cream into dark */}
+      <div style={{
+        position: 'absolute', top: 0, left: 0, right: 0, height: '80px',
+        background: 'linear-gradient(to bottom, #F8F4ED 0%, transparent 100%)',
+        zIndex: 1, pointerEvents: 'none',
+      }} />
+      {/* Bottom fade — blend from dark into next section */}
+      <div style={{
+        position: 'absolute', bottom: 0, left: 0, right: 0, height: '80px',
+        background: 'linear-gradient(to top, #F8F4ED 0%, transparent 100%)',
+        zIndex: 1, pointerEvents: 'none',
+      }} />
       <div style={{ maxWidth: '1200px', margin: '0 auto', position: 'relative', zIndex: 1 }}>
         <div ref={headRef} style={{ textAlign: 'center', marginBottom: '4rem' }}>
           <motion.p

@@ -15,7 +15,7 @@ export default function StatsBanner() {
   ]
 
   return (
-    <section ref={ref} style={{ backgroundColor: '#0D1B2A', padding: '3rem 1.5rem', borderTop: '1px solid rgba(201,168,76,0.1)', borderBottom: '1px solid rgba(201,168,76,0.1)' }}>
+    <section ref={ref} style={{ backgroundColor: 'transparent', padding: '3rem 1.5rem' }}>
       <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1.5rem 2rem', alignItems: 'center' }}>
           {items.map((item, i) => (
@@ -27,7 +27,7 @@ export default function StatsBanner() {
               style={{ display: 'flex', alignItems: 'center', gap: '0.875rem' }}
             >
               <span style={{ fontSize: '1.5rem', flexShrink: 0 }}>{item.icon}</span>
-              <p style={{ fontSize: '0.9rem', color: 'rgba(255,255,255,0.75)', fontFamily: 'var(--font-ibm, sans-serif)', fontWeight: 500, lineHeight: 1.4 }}>
+              <p style={{ fontSize: '0.9rem', color: '#0D1B2A', fontFamily: 'var(--font-ibm, sans-serif)', fontWeight: 500, lineHeight: 1.4 }}>
                 {item.text}
               </p>
             </motion.div>
