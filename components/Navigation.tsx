@@ -1,5 +1,6 @@
 'use client'
 import { useEffect, useState } from 'react'
+import { usePathname } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import Link from 'next/link'
 import Logo from './Logo'
@@ -7,6 +8,9 @@ import Logo from './Logo'
 export default function Navigation() {
   const [scrolled, setScrolled] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
+  const pathname = usePathname()
+  // Only the homepage has the transparent nav (bridge photo hero)
+  const isHomepage = pathname === '/'
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40)
@@ -38,9 +42,9 @@ export default function Navigation() {
           left: 0,
           right: 0,
           zIndex: 50,
-          backgroundColor: scrolled ? 'rgba(13,27,42,0.95)' : 'transparent',
-          backdropFilter: scrolled ? 'blur(12px)' : 'none',
-          borderBottom: scrolled ? '1px solid rgba(201,168,76,0.15)' : 'none',
+          backgroundColor: (scrolled || !isHomepage) ? 'rgba(13,27,42,0.95)' : 'transparent',
+          backdropFilter: (scrolled || !isHomepage) ? 'blur(12px)' : 'none',
+          borderBottom: (scrolled || !isHomepage) ? '1px solid rgba(201,168,76,0.15)' : 'none',
           transition: 'all 0.3s ease',
         }}
       >
