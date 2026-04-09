@@ -203,7 +203,7 @@ export default function HowItWorks() {
             </motion.h2>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.5rem' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1.5rem', maxWidth: '900px', margin: '0 auto' }}>
             {steps.map((s, i) => <Step key={s.number} step={s} index={i} />)}
           </div>
 
