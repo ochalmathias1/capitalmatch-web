@@ -65,6 +65,7 @@ function Step({ step, index }: { step: typeof steps[0], index: number }) {
   return (
     <motion.div
       ref={ref}
+      className="card-glow"
       initial={reduced ? {} : { opacity: 0, y: 50, scale: 0.95 }}
       animate={inView ? { opacity: 1, y: 0, scale: 1 } : {}}
       transition={{ duration: 0.7, delay: index * 0.15, ease: [0.25, 0.46, 0.45, 0.94] }}
@@ -78,6 +79,7 @@ function Step({ step, index }: { step: typeof steps[0], index: number }) {
         backdropFilter: 'blur(8px)',
         position: 'relative',
         overflow: 'hidden',
+        cursor: 'pointer',
       }}
     >
       <div style={{ flexShrink: 0 }}>
@@ -144,12 +146,13 @@ export default function HowItWorks() {
           overflow: 'hidden',
         }}
       >
-        {/* Background image */}
+        {/* Background image — parallax */}
         <div style={{
-          position: 'absolute', inset: 0,
+          position: 'absolute', inset: '-10%',
           backgroundImage: 'url(/bridge-cables.jpg)',
           backgroundSize: 'cover',
           backgroundPosition: 'center',
+          backgroundAttachment: 'fixed',
         }} />
         {/* Dark overlay */}
         <div style={{

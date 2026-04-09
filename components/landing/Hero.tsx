@@ -32,14 +32,15 @@ export default function Hero() {
         overflow: 'hidden',
       }}
     >
-      {/* Bridge background image */}
+      {/* Bridge background image — parallax */}
       <div style={{
         position: 'absolute',
-        inset: 0,
+        inset: '-10%',
         backgroundImage: 'url(/hero-bridge.jpg)',
         backgroundSize: 'cover',
         backgroundPosition: 'center 30%',
         backgroundRepeat: 'no-repeat',
+        backgroundAttachment: 'fixed',
       }} />
 
       {/* Dark overlay — navy gradient for text readability */}
@@ -115,10 +116,10 @@ export default function Hero() {
             transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}
             style={{ borderRadius: '8px' }}
           >
-            <Link href="/apply" style={{
+            <Link href="/apply" className="btn-shimmer" style={{
               display: 'inline-flex', alignItems: 'center', gap: '0.5rem',
               padding: '1rem 2rem',
-              backgroundColor: '#C9A84C', color: '#0D1B2A',
+              color: '#0D1B2A',
               borderRadius: '8px', fontWeight: 700, fontSize: '1rem',
               fontFamily: 'var(--font-ibm, sans-serif)', textDecoration: 'none',
             }}>

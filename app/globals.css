@@ -152,6 +152,35 @@ h1, h2, h3, h4, h5, h6 {
   to { transform: rotate(360deg); }
 }
 
+@keyframes shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+.btn-shimmer {
+  position: relative;
+  overflow: hidden;
+  background-image: linear-gradient(
+    110deg,
+    #C9A84C 0%,
+    #C9A84C 40%,
+    #E2C97A 50%,
+    #C9A84C 60%,
+    #C9A84C 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 3s ease-in-out infinite;
+}
+
+.card-glow {
+  transition: all 0.35s ease;
+}
+.card-glow:hover {
+  border-color: rgba(201, 168, 76, 0.5) !important;
+  box-shadow: 0 0 20px rgba(201, 168, 76, 0.15), 0 8px 32px rgba(0, 0, 0, 0.2);
+  transform: translateY(-4px);
+}
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;

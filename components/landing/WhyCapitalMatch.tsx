@@ -70,10 +70,10 @@ function BenefitCard({ benefit, index }: { benefit: typeof benefits[0], index: n
   return (
     <motion.div
       ref={ref}
-      initial={reduced ? {} : { opacity: 0, y: 30 }}
-      animate={inView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.5, delay: index * 0.08 }}
-      whileHover={reduced ? {} : { y: -4, boxShadow: '0 8px 40px rgba(201,168,76,0.2)', borderColor: 'rgba(201,168,76,0.5)' }}
+      className="card-glow"
+      initial={reduced ? {} : { opacity: 0, x: index % 2 === 0 ? -40 : 40, y: 20 }}
+      animate={inView ? { opacity: 1, x: 0, y: 0 } : {}}
+      transition={{ duration: 0.6, delay: index * 0.1, ease: [0.25, 0.46, 0.45, 0.94] }}
       style={{
         padding: '2rem',
         borderRadius: '12px',

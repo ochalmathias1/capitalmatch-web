@@ -55,8 +55,21 @@ export default function Mission() {
             color: '#0D1B2A',
             marginBottom: '2rem',
             lineHeight: 1.2,
+            display: 'flex',
+            flexWrap: 'wrap',
+            justifyContent: 'center',
+            gap: '0 0.3em',
           }}>
-            We built CapitalMatch to fix a broken industry.
+            {'We built CapitalMatch to fix a broken industry.'.split(' ').map((word, i) => (
+              <motion.span
+                key={i}
+                initial={reduced ? {} : { opacity: 0, y: 20 }}
+                animate={inView ? { opacity: 1, y: 0 } : {}}
+                transition={{ duration: 0.4, delay: 0.1 + i * 0.06 }}
+              >
+                {word}
+              </motion.span>
+            ))}
           </h2>
           <div style={{ maxWidth: '680px', margin: '0 auto 4rem', display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
             {[
