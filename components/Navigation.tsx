@@ -42,9 +42,9 @@ export default function Navigation() {
           left: 0,
           right: 0,
           zIndex: 50,
-          backgroundColor: (scrolled || !isHomepage) ? 'rgba(13,27,42,0.95)' : 'transparent',
-          backdropFilter: (scrolled || !isHomepage) ? 'blur(12px)' : 'none',
-          borderBottom: (scrolled || !isHomepage) ? '1px solid rgba(201,168,76,0.15)' : 'none',
+          backgroundColor: (scrolled || !isHomepage || mobileOpen) ? 'rgba(13,27,42,0.95)' : 'transparent',
+          backdropFilter: (scrolled || !isHomepage || mobileOpen) ? 'blur(12px)' : 'none',
+          borderBottom: (scrolled || !isHomepage || mobileOpen) ? '1px solid rgba(201,168,76,0.15)' : 'none',
           transition: 'all 0.3s ease',
         }}
       >
@@ -204,6 +204,14 @@ export default function Navigation() {
             >
               Apply Now — It&apos;s Free
             </Link>
+            <div style={{ borderTop: '1px solid rgba(255,255,255,0.08)', paddingTop: '1rem', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+              <a href="tel:3478139747" style={{ color: 'rgba(255,255,255,0.6)', fontSize: '0.85rem', fontFamily: 'var(--font-ibm, sans-serif)', textDecoration: 'none' }}>
+                📞 Eddie Novak — (347) 813-9747
+              </a>
+              <a href="tel:8482499289" style={{ color: 'rgba(255,255,255,0.6)', fontSize: '0.85rem', fontFamily: 'var(--font-ibm, sans-serif)', textDecoration: 'none' }}>
+                📞 William Levine — (848) 249-9289
+              </a>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
