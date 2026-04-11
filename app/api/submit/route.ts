@@ -171,7 +171,17 @@ export async function POST(req: NextRequest) {
     // ── 3. Insert DB row first (status: 'draft') ─────────────────────────
     // Inserting before PDF generation means PDF is never orphaned in storage
     // if the DB insert fails. Draft status is invisible to the pipeline.
-    dealId = `${data.businessName.replace(/\s+/g, '-').toUpperCase()}-${now.getTime()}`
+    // Sanitize business name for dealId: strip diacritics and non-ASCII chars
+    // (smart quotes, emoji, accented letters) that break Supabase storage paths.
+    const safeName = data.businessName
+      .normalize('NFKD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/[^a-zA-Z0-9\s-]/g, '')
+      .replace(/\s+/g, '-')
+      .replace(/-+/g, '-')
+      .replace(/^-|-$/g, '')
+      .toUpperCase() || 'APPLICATION'
+    dealId = `${safeName}-${now.getTime()}`
 
     const { error: dbError } = await supabase.from('applications').insert({
       deal_id:              dealId,
