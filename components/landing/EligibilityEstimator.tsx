@@ -8,10 +8,17 @@ const industries = [
   { name: 'Restaurant', multiplier: 0.85 },
   { name: 'Trucking', multiplier: 1.0 },
   { name: 'Retail', multiplier: 0.9 },
-  { name: 'Auto', multiplier: 0.95 },
+  { name: 'Auto & Repair', multiplier: 0.95 },
   { name: 'Healthcare', multiplier: 1.2 },
   { name: 'Wholesale', multiplier: 1.1 },
   { name: 'Services', multiplier: 1.0 },
+  { name: 'Beauty & Salon', multiplier: 0.9 },
+  { name: 'E-Commerce', multiplier: 0.95 },
+  { name: 'Landscaping', multiplier: 1.0 },
+  { name: 'Manufacturing', multiplier: 1.1 },
+  { name: 'Dental', multiplier: 1.15 },
+  { name: 'Cleaning', multiplier: 0.9 },
+  { name: 'Other', multiplier: 1.0 },
 ]
 
 const revenueStops = [5, 10, 15, 20, 25, 30, 40, 50, 75, 100, 150, 200, 250, 300, 400, 500]
@@ -241,13 +248,6 @@ export default function EligibilityEstimator() {
                   }}
                 >
                   {ind.name}
-                  <span style={{
-                    fontSize: '0.72rem',
-                    opacity: 0.6,
-                    marginLeft: '0.3rem',
-                  }}>
-                    {ind.multiplier}x
-                  </span>
                 </button>
               ))}
             </div>

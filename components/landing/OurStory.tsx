@@ -21,7 +21,7 @@ export default function OurStory() {
       <div style={{
         position: 'absolute',
         inset: 0,
-        backgroundImage: 'url(/story-bridge.jpg)',
+        backgroundImage: 'url(/story-bridge-2.jpg)',
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         opacity: 0.38,
@@ -64,7 +64,7 @@ export default function OurStory() {
           <div style={{
             position: 'absolute',
             inset: 0,
-            backgroundImage: 'url(/story-bridge.jpg)',
+            backgroundImage: 'url(/story-bridge-2.jpg)',
             backgroundSize: 'cover',
             backgroundPosition: 'center',
           }} />
