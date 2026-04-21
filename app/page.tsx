@@ -1,13 +1,15 @@
 import type { Metadata } from 'next'
 import Navigation from '@/components/Navigation'
 import Hero from '@/components/landing/Hero'
-import Mission from '@/components/landing/Mission'
+import EligibilityEstimator from '@/components/landing/EligibilityEstimator'
 import HowItWorks from '@/components/landing/HowItWorks'
-import WhyCapitalMatch from '@/components/landing/WhyCapitalMatch'
+import OurStory from '@/components/landing/OurStory'
+import Products from '@/components/landing/Products'
 import Reviews from '@/components/landing/Reviews'
+import Industries from '@/components/landing/Industries'
+import FAQ from '@/components/landing/FAQ'
 import FinalCTA from '@/components/landing/FinalCTA'
 import Footer from '@/components/Footer'
-import Link from 'next/link'
 
 export const metadata: Metadata = {
   title: 'Business Funding in 24 Hours | No Broker Fees | CapitalMatch',
@@ -62,38 +64,19 @@ export default function Home() {
       <Navigation />
       <main>
         <Hero />
-        <Mission />
+        <EligibilityEstimator />
+        <div style={{ maxWidth: '200px', margin: '0 auto', height: '1px', background: 'linear-gradient(90deg, transparent, var(--gold), transparent)', opacity: 0.3 }} />
+        <OurStory />
+        <div style={{ maxWidth: '200px', margin: '0 auto', height: '1px', background: 'linear-gradient(90deg, transparent, var(--gold), transparent)', opacity: 0.3 }} />
         <HowItWorks />
-        <WhyCapitalMatch />
+        <div style={{ maxWidth: '200px', margin: '0 auto', height: '1px', background: 'linear-gradient(90deg, transparent, var(--gold), transparent)', opacity: 0.3 }} />
+        <Products />
+        <div style={{ maxWidth: '200px', margin: '0 auto', height: '1px', background: 'linear-gradient(90deg, transparent, var(--gold), transparent)', opacity: 0.3 }} />
         <Reviews />
+        <Industries />
+        <div style={{ maxWidth: '200px', margin: '0 auto', height: '1px', background: 'linear-gradient(90deg, transparent, var(--gold), transparent)', opacity: 0.3 }} />
+        <FAQ />
         <FinalCTA />
-
-        {/* SEO keyword-rich section */}
-        <section style={{ backgroundColor: '#F8F4ED', padding: '3rem 1.5rem', borderTop: '1px solid #E5E7EB' }}>
-          <div style={{ maxWidth: '900px', margin: '0 auto', textAlign: 'center' }}>
-            <p style={{
-              fontSize: '0.9rem',
-              color: '#6B7280',
-              lineHeight: 1.9,
-              fontFamily: 'var(--font-ibm, sans-serif)',
-              marginBottom: '1.5rem',
-            }}>
-              CapitalMatch provides merchant cash advance funding for small business owners across all 50 states.
-              Whether you need working capital, equipment financing, payroll funding, or business expansion capital,
-              our network of community of private lenders can help. We specialize in fast business funding for restaurants,
-              retail stores, trucking companies, medical practices, contractors, and more.
-              Bad credit business loans available. No broker fees. Apply online today.
-            </p>
-            <div style={{ display: 'flex', justifyContent: 'center', gap: '1.5rem', flexWrap: 'wrap' }}>
-              <Link href="/faq" style={{ fontSize: '0.85rem', color: '#C9A84C', textDecoration: 'none', fontFamily: 'var(--font-ibm, sans-serif)' }}>
-                Learn how merchant cash advances work →
-              </Link>
-              <Link href="/apply" style={{ fontSize: '0.85rem', color: '#C9A84C', textDecoration: 'none', fontFamily: 'var(--font-ibm, sans-serif)' }}>
-                Apply for business funding today →
-              </Link>
-            </div>
-          </div>
-        </section>
       </main>
       <Footer />
     </>

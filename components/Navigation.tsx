@@ -9,7 +9,6 @@ export default function Navigation() {
   const [scrolled, setScrolled] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
   const pathname = usePathname()
-  // Only the homepage has the transparent nav (bridge photo hero)
   const isHomepage = pathname === '/'
 
   useEffect(() => {
@@ -26,9 +25,11 @@ export default function Navigation() {
 
   const navLinks = [
     { label: 'How It Works', id: 'how-it-works' },
-    { label: 'FAQ', href: '/faq' },
-    { label: 'Reviews', id: 'reviews' },
+    { label: 'About', id: 'our-story' },
+    { label: 'FAQ', id: 'faq' },
   ]
+
+  const solid = scrolled || !isHomepage || mobileOpen
 
   return (
     <>
@@ -42,14 +43,15 @@ export default function Navigation() {
           left: 0,
           right: 0,
           zIndex: 50,
-          backgroundColor: (scrolled || !isHomepage || mobileOpen) ? 'rgba(13,27,42,0.95)' : 'transparent',
-          backdropFilter: (scrolled || !isHomepage || mobileOpen) ? 'blur(12px)' : 'none',
-          borderBottom: (scrolled || !isHomepage || mobileOpen) ? '1px solid rgba(201,168,76,0.15)' : 'none',
-          transition: 'all 0.3s ease',
+          backgroundColor: solid ? 'rgba(10,23,37,0.92)' : 'transparent',
+          backdropFilter: solid ? 'blur(14px)' : 'none',
+          WebkitBackdropFilter: solid ? 'blur(14px)' : 'none',
+          borderBottom: solid ? '1px solid rgba(201,168,76,0.1)' : 'none',
+          transition: 'all 0.35s ease',
         }}
       >
         <div style={{
-          maxWidth: '1200px',
+          maxWidth: '1280px',
           margin: '0 auto',
           padding: '0 1.5rem',
           height: '72px',
@@ -57,72 +59,57 @@ export default function Navigation() {
           alignItems: 'center',
           justifyContent: 'space-between',
         }}>
-          <Link href="/" style={{ textDecoration: 'none' }}>
-            <Logo light size="md" />
-          </Link>
+          {/* Left: Logo */}
+          <Logo light size="md" />
 
-          {/* Desktop links */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '2rem' }} className="desktop-nav">
+          {/* Center: nav links */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '2.5rem' }} className="desktop-nav">
             {navLinks.map(link => (
-              link.href ? (
-                <Link
-                  key={link.label}
-                  href={link.href}
-                  style={{
-                    color: 'rgba(255,255,255,0.8)',
-                    fontSize: '0.9rem',
-                    fontFamily: 'var(--font-ibm, sans-serif)',
-                    fontWeight: 500,
-                    textDecoration: 'none',
-                    transition: 'color 0.2s',
-                  }}
-                  onMouseEnter={e => (e.currentTarget.style.color = '#C9A84C')}
-                  onMouseLeave={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.8)')}
-                >
-                  {link.label}
-                </Link>
-              ) : (
-                <button
-                  key={link.label}
-                  onClick={() => scrollTo(link.id!)}
-                  style={{
-                    background: 'none',
-                    border: 'none',
-                    color: 'rgba(255,255,255,0.8)',
-                    fontSize: '0.9rem',
-                    fontFamily: 'var(--font-ibm, sans-serif)',
-                    fontWeight: 500,
-                    cursor: 'pointer',
-                    padding: 0,
-                    transition: 'color 0.2s',
-                  }}
-                  onMouseEnter={e => (e.currentTarget.style.color = '#C9A84C')}
-                  onMouseLeave={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.8)')}
-                >
-                  {link.label}
-                </button>
-              )
+              <button
+                key={link.label}
+                onClick={() => scrollTo(link.id)}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  color: 'rgba(255,255,255,0.72)',
+                  fontSize: '0.88rem',
+                  fontFamily: 'var(--font-ibm, sans-serif)',
+                  fontWeight: 500,
+                  cursor: 'pointer',
+                  padding: 0,
+                  transition: 'color 0.2s',
+                  letterSpacing: '0.01em',
+                }}
+                onMouseEnter={e => (e.currentTarget.style.color = 'var(--gold)')}
+                onMouseLeave={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.72)')}
+              >
+                {link.label}
+              </button>
             ))}
+          </div>
+
+          {/* Right: CTA only */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }} className="desktop-nav">
             <Link
               href="/apply"
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',
-                padding: '0.625rem 1.5rem',
-                backgroundColor: '#C9A84C',
-                color: '#0D1B2A',
+                padding: '0.6rem 1.4rem',
+                backgroundColor: 'var(--gold)',
+                color: 'var(--navy)',
                 borderRadius: '6px',
                 fontWeight: 700,
-                fontSize: '0.9rem',
+                fontSize: '0.85rem',
                 fontFamily: 'var(--font-ibm, sans-serif)',
                 textDecoration: 'none',
-                boxShadow: '0 0 20px rgba(201,168,76,0.3)',
+                letterSpacing: '0.01em',
                 transition: 'all 0.2s',
               }}
-              onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#E2C97A'; e.currentTarget.style.boxShadow = '0 0 30px rgba(201,168,76,0.5)' }}
-              onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#C9A84C'; e.currentTarget.style.boxShadow = '0 0 20px rgba(201,168,76,0.3)' }}
+              onMouseEnter={e => { e.currentTarget.style.backgroundColor = 'var(--gold-light)'; e.currentTarget.style.boxShadow = '0 0 24px rgba(201,168,76,0.4)' }}
+              onMouseLeave={e => { e.currentTarget.style.backgroundColor = 'var(--gold)'; e.currentTarget.style.boxShadow = 'none' }}
             >
-              Apply Now
+              Check My Options
             </Link>
           </div>
 
@@ -161,35 +148,35 @@ export default function Navigation() {
               top: '72px',
               left: 0,
               right: 0,
+              bottom: 0,
               zIndex: 49,
-              backgroundColor: 'rgba(13,27,42,0.98)',
-              backdropFilter: 'blur(12px)',
-              borderBottom: '1px solid rgba(201,168,76,0.15)',
-              padding: '1.5rem',
+              backgroundColor: 'rgba(10,23,37,0.98)',
+              backdropFilter: 'blur(14px)',
+              WebkitBackdropFilter: 'blur(14px)',
+              padding: '2rem 1.5rem',
               display: 'flex',
               flexDirection: 'column',
-              gap: '1.25rem',
+              gap: '1.5rem',
             }}
           >
             {navLinks.map(link => (
-              link.href ? (
-                <Link
-                  key={link.label}
-                  href={link.href}
-                  onClick={() => setMobileOpen(false)}
-                  style={{ color: 'rgba(255,255,255,0.85)', fontSize: '1rem', fontFamily: 'var(--font-ibm, sans-serif)', fontWeight: 500, textDecoration: 'none' }}
-                >
-                  {link.label}
-                </Link>
-              ) : (
-                <button
-                  key={link.label}
-                  onClick={() => scrollTo(link.id!)}
-                  style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.85)', fontSize: '1rem', fontFamily: 'var(--font-ibm, sans-serif)', fontWeight: 500, cursor: 'pointer', padding: 0, textAlign: 'left' }}
-                >
-                  {link.label}
-                </button>
-              )
+              <button
+                key={link.label}
+                onClick={() => scrollTo(link.id)}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  color: 'rgba(255,255,255,0.85)',
+                  fontSize: '1.1rem',
+                  fontFamily: 'var(--font-playfair, serif)',
+                  fontWeight: 600,
+                  cursor: 'pointer',
+                  padding: 0,
+                  textAlign: 'left',
+                }}
+              >
+                {link.label}
+              </button>
             ))}
             <Link
               href="/apply"
@@ -197,19 +184,20 @@ export default function Navigation() {
               style={{
                 display: 'inline-flex', justifyContent: 'center',
                 padding: '0.875rem 1.5rem',
-                backgroundColor: '#C9A84C', color: '#0D1B2A',
+                backgroundColor: 'var(--gold)', color: 'var(--navy)',
                 borderRadius: '6px', fontWeight: 700, fontSize: '1rem',
                 fontFamily: 'var(--font-ibm, sans-serif)', textDecoration: 'none',
+                marginTop: '0.5rem',
               }}
             >
-              Apply Now — It&apos;s Free
+              Check My Options — It&apos;s Free
             </Link>
-            <div style={{ borderTop: '1px solid rgba(255,255,255,0.08)', paddingTop: '1rem', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-              <a href="tel:3478139747" style={{ color: 'rgba(255,255,255,0.6)', fontSize: '0.85rem', fontFamily: 'var(--font-ibm, sans-serif)', textDecoration: 'none' }}>
-                📞 Eddie Novak — (347) 813-9747
+            <div style={{ borderTop: '1px solid rgba(255,255,255,0.08)', paddingTop: '1.5rem', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+              <a href="tel:3478139747" style={{ color: 'rgba(255,255,255,0.6)', fontSize: '0.88rem', fontFamily: 'var(--font-mono), monospace', textDecoration: 'none' }}>
+                Eddie (347) 813-9747
               </a>
-              <a href="tel:8482499289" style={{ color: 'rgba(255,255,255,0.6)', fontSize: '0.85rem', fontFamily: 'var(--font-ibm, sans-serif)', textDecoration: 'none' }}>
-                📞 William Levine — (848) 249-9289
+              <a href="tel:8482499289" style={{ color: 'rgba(255,255,255,0.6)', fontSize: '0.88rem', fontFamily: 'var(--font-mono), monospace', textDecoration: 'none' }}>
+                William (848) 249-9289
               </a>
             </div>
           </motion.div>

@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&display=swap');
 @import "tailwindcss";
 
 @theme {
@@ -14,6 +15,25 @@
   --font-sign: 'Dancing Script', cursive;
 }
 
+:root {
+  --navy: #0A1725;
+  --navy-soft: #13253A;
+  --gold: #C9A84C;
+  --gold-light: #E2C97A;
+  --gold-dark: #A8882E;
+  --cream: #F5F1EA;
+  --cream-2: #EDE8DD;
+  --ink: #0E1A2B;
+  --muted: #5B6473;
+  --line: #E8E2D3;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
+::selection {
+  background: var(--gold);
+  color: var(--navy);
+}
+
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
 
@@ -22,10 +42,31 @@ body {
   background-color: #F8F4ED;
   color: #0D1B2A;
   -webkit-font-smoothing: antialiased;
+  font-feature-settings: "ss01", "cv11", "kern";
 }
 
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-display);
+}
+
+/* Reveal animation classes */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 900ms cubic-bezier(.2,.7,.2,1), transform 900ms cubic-bezier(.2,.7,.2,1);
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.reveal.d1 {
+  transition-delay: 0.08s;
+}
+.reveal.d2 {
+  transition-delay: 0.16s;
+}
+.reveal.d3 {
+  transition-delay: 0.24s;
 }
 
 .btn-primary {
@@ -179,6 +220,16 @@ h1, h2, h3, h4, h5, h6 {
   border-color: rgba(201, 168, 76, 0.5) !important;
   box-shadow: 0 0 20px rgba(201, 168, 76, 0.15), 0 8px 32px rgba(0, 0, 0, 0.2);
   transform: translateY(-4px);
+}
+
+@keyframes slow-drift {
+  0% { transform: scale(1); }
+  100% { transform: scale(1.08); }
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { Cormorant_Garamond, Inter, Dancing_Script } from 'next/font/google'
+import { Cormorant_Garamond, Inter, Dancing_Script, JetBrains_Mono } from 'next/font/google'
 import './globals.css'
 
 const cormorant = Cormorant_Garamond({
@@ -20,6 +20,13 @@ const dancing = Dancing_Script({
   subsets: ['latin'],
   weight: ['400', '500', '600', '700'],
   variable: '--font-dancing',
+  display: 'swap',
+})
+
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ['latin'],
+  weight: ['300', '400', '500', '600', '700'],
+  variable: '--font-mono',
   display: 'swap',
 })
 
@@ -64,7 +71,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${cormorant.variable} ${inter.variable} ${dancing.variable}`}>
+    <html lang="en" className={`${cormorant.variable} ${inter.variable} ${dancing.variable} ${jetbrainsMono.variable}`}>
       <body style={{ fontFamily: 'var(--font-ibm), IBM Plex Sans, system-ui, sans-serif' }}>
         {children}
       </body>

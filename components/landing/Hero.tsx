@@ -8,17 +8,8 @@ export default function Hero() {
   const fadeUp = (delay = 0) => reduced ? {} : {
     initial: { opacity: 0, y: 32 },
     animate: { opacity: 1, y: 0 },
-    transition: { duration: 0.55, delay, ease: [0.25, 0.46, 0.45, 0.94] as [number, number, number, number] },
+    transition: { duration: 0.6, delay, ease: [0.2, 0.7, 0.2, 1] as [number, number, number, number] },
   }
-
-  const trustItems = [
-    'No broker fees ever',
-    'No hard credit check',
-    'Results in 24 hours',
-    'Community of private lenders',
-    'All industries welcome',
-    'Bad credit options available',
-  ]
 
   return (
     <section
@@ -26,153 +17,207 @@ export default function Hero() {
       style={{
         minHeight: '100vh',
         display: 'flex',
-        alignItems: 'center',
-        paddingTop: '72px',
+        flexDirection: 'column',
+        justifyContent: 'center',
         position: 'relative',
         overflow: 'hidden',
       }}
     >
-      {/* Bridge background image — parallax */}
-      <div style={{
-        position: 'absolute',
-        inset: '-10%',
-        backgroundImage: 'url(/hero-bridge.jpg)',
-        backgroundSize: 'cover',
-        backgroundPosition: 'center 30%',
-        backgroundRepeat: 'no-repeat',
-        backgroundAttachment: 'fixed',
-      }} />
-
-      {/* Dark overlay — navy gradient for text readability */}
+      {/* Background image with ken-burns drift */}
       <div style={{
         position: 'absolute',
         inset: 0,
-        background: 'linear-gradient(135deg, rgba(13,27,42,0.92) 0%, rgba(13,27,42,0.82) 40%, rgba(13,27,42,0.7) 100%)',
+        overflow: 'hidden',
+      }}>
+        <div style={{
+          position: 'absolute',
+          inset: '-5%',
+          backgroundImage: 'url(/story-bridge.jpg)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          opacity: 0.42,
+          animation: reduced ? 'none' : 'slow-drift 32s ease-in-out infinite alternate',
+          transformOrigin: 'center center',
+        }} />
+      </div>
+
+      {/* SVG noise grain overlay */}
+      <div style={{
+        position: 'absolute',
+        inset: 0,
+        opacity: 0.035,
+        pointerEvents: 'none',
+        backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`,
+        backgroundRepeat: 'repeat',
+        backgroundSize: '128px 128px',
       }} />
 
+      {/* Gradient overlays for text legibility */}
+      <div style={{
+        position: 'absolute',
+        inset: 0,
+        background: 'linear-gradient(180deg, rgba(10,23,37,0.85) 0%, rgba(10,23,37,0.6) 50%, rgba(10,23,37,0.9) 100%)',
+      }} />
+      <div style={{
+        position: 'absolute',
+        inset: 0,
+        background: 'linear-gradient(135deg, rgba(10,23,37,0.5) 0%, transparent 60%)',
+      }} />
 
-      {/* Subtle gold glow at top right */}
-      <motion.div
-        animate={reduced ? {} : { opacity: [0.3, 0.5, 0.3] }}
-        transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
-        style={{
-          position: 'absolute', top: '-5%', right: '-5%',
-          width: '500px', height: '500px', borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(201,168,76,0.15) 0%, transparent 70%)',
-          pointerEvents: 'none',
-        }}
-      />
+      {/* Main content */}
+      <div style={{
+        maxWidth: '1280px',
+        margin: '0 auto',
+        padding: 'clamp(7rem, 14vw, 10rem) 1.5rem clamp(6rem, 10vw, 8rem)',
+        width: '100%',
+        position: 'relative',
+        zIndex: 1,
+      }}>
+        {/* Mono eyebrow */}
+        <motion.p {...fadeUp(0.1)} style={{
+          fontFamily: 'var(--font-mono), monospace',
+          fontSize: '10px',
+          letterSpacing: '0.22em',
+          textTransform: 'uppercase',
+          color: 'var(--gold)',
+          marginBottom: '2rem',
+          fontWeight: 400,
+        }}>
+          — MERCHANT CASH ADVANCE &middot; EST. NEW YORK —
+        </motion.p>
 
-      <div style={{ maxWidth: '1200px', margin: '0 auto', padding: 'clamp(3rem, 8vw, 6rem) 1.5rem', width: '100%', position: 'relative', zIndex: 1 }}>
-        {/* Badge */}
-        <motion.div {...fadeUp(0.1)}>
-          <div style={{
-            display: 'inline-flex', alignItems: 'center', gap: '0.5rem',
-            backgroundColor: 'rgba(201,168,76,0.1)', border: '1px solid rgba(201,168,76,0.3)',
-            borderRadius: '100px', padding: '0.4rem 1rem', marginBottom: '1.75rem',
-            backdropFilter: 'blur(8px)',
-          }}>
-            <div style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: '#C9A84C' }} />
-            <span style={{ fontSize: '0.78rem', fontWeight: 600, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#C9A84C', fontFamily: 'var(--font-ibm, sans-serif)' }}>
-              Merchant Cash Advance · Zero Broker Fees
-            </span>
-          </div>
-        </motion.div>
-
-        {/* Headline */}
+        {/* Huge serif headline */}
         <motion.h1 {...fadeUp(0.2)} style={{
           fontFamily: 'var(--font-playfair, serif)',
-          fontSize: 'clamp(2.4rem, 6vw, 4.5rem)',
+          fontSize: 'clamp(56px, 8vw, 112px)',
           fontWeight: 700,
-          lineHeight: 1.1,
+          lineHeight: 1.02,
+          letterSpacing: '-0.028em',
           color: '#FFFFFF',
-          marginBottom: '1.5rem',
-          maxWidth: '800px',
-          textShadow: '0 2px 20px rgba(0,0,0,0.3)',
+          marginBottom: '2rem',
+          maxWidth: '900px',
         }}>
-          Fast Capital.{' '}
-          <span style={{ color: '#C9A84C' }}>Zero Broker Fees.</span>
-          <br />Funding in 24 Hours.
+          Fast Capital.<br />
+          <span style={{ fontStyle: 'italic', color: 'var(--gold)' }}>Zero Broker Fees.</span><br />
+          Funded in 24 Hours.
         </motion.h1>
 
-        {/* Subheadline */}
-        <motion.p {...fadeUp(0.3)} style={{
-          fontSize: 'clamp(1rem, 2vw, 1.2rem)',
-          color: 'rgba(255,255,255,0.8)',
-          lineHeight: 1.75,
+        {/* Subtext */}
+        <motion.p {...fadeUp(0.35)} style={{
+          fontSize: '19.5px',
+          color: 'rgba(255,255,255,0.78)',
+          lineHeight: 1.7,
           marginBottom: '2.5rem',
-          maxWidth: '580px',
+          maxWidth: '620px',
           fontFamily: 'var(--font-ibm, sans-serif)',
-          textShadow: '0 1px 8px rgba(0,0,0,0.2)',
+          fontWeight: 300,
         }}>
-          Most business owners get passed around by brokers who take a cut of everything. We cut them out entirely.
-          One application reaches our entire lender network — and you keep every dollar.
+          Most business owners get passed around by brokers who take a cut of everything. We cut them out entirely. One application reaches our entire lender network — and you keep every dollar.
         </motion.p>
 
         {/* CTAs */}
-        <motion.div {...fadeUp(0.4)} style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', marginBottom: '3rem' }}>
-          <motion.div
-            animate={reduced ? {} : { boxShadow: ['0 0 20px rgba(201,168,76,0.3)', '0 0 35px rgba(201,168,76,0.55)', '0 0 20px rgba(201,168,76,0.3)'] }}
-            transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}
-            style={{ borderRadius: '8px' }}
-          >
-            <Link href="/apply" className="btn-shimmer" style={{
-              display: 'inline-flex', alignItems: 'center', gap: '0.5rem',
-              padding: '1rem 2rem',
-              color: '#0D1B2A',
-              borderRadius: '8px', fontWeight: 700, fontSize: '1rem',
-              fontFamily: 'var(--font-ibm, sans-serif)', textDecoration: 'none',
-            }}>
-              Check My Options — It&apos;s Free
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
-            </Link>
-          </motion.div>
+        <motion.div {...fadeUp(0.45)} style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', marginBottom: '0' }}>
+          <Link href="/apply" className="btn-shimmer" style={{
+            display: 'inline-flex', alignItems: 'center', gap: '0.5rem',
+            padding: '1rem 2rem',
+            color: 'var(--navy)',
+            borderRadius: '6px', fontWeight: 700, fontSize: '1rem',
+            fontFamily: 'var(--font-ibm, sans-serif)', textDecoration: 'none',
+          }}>
+            Check My Options — It&apos;s Free
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </Link>
 
           <button
             onClick={() => { const el = document.getElementById('how-it-works'); if (el) el.scrollIntoView({ behavior: 'smooth' }) }}
             style={{
               display: 'inline-flex', alignItems: 'center', gap: '0.5rem',
               padding: '1rem 2rem',
-              backgroundColor: 'rgba(255,255,255,0.05)', color: '#FFFFFF',
-              border: '1.5px solid rgba(255,255,255,0.25)', borderRadius: '8px',
+              backgroundColor: 'transparent', color: '#FFFFFF',
+              border: '1.5px solid rgba(255,255,255,0.22)', borderRadius: '6px',
               fontWeight: 600, fontSize: '1rem',
               fontFamily: 'var(--font-ibm, sans-serif)', cursor: 'pointer',
-              transition: 'all 0.2s',
-              backdropFilter: 'blur(4px)',
+              transition: 'all 0.25s',
             }}
-            onMouseEnter={e => { e.currentTarget.style.borderColor = '#C9A84C'; e.currentTarget.style.color = '#C9A84C' }}
-            onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.25)'; e.currentTarget.style.color = '#FFFFFF' }}
+            onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--gold)'; e.currentTarget.style.color = 'var(--gold)' }}
+            onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.22)'; e.currentTarget.style.color = '#FFFFFF' }}
           >
             See How It Works
           </button>
         </motion.div>
-
-        {/* Trust bar */}
-        <motion.div {...fadeUp(0.5)}>
-          <div style={{
-            display: 'flex', flexWrap: 'wrap', gap: '0.75rem 1.75rem',
-          }}>
-            {trustItems.map(item => (
-              <div key={item} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                <div style={{
-                  width: '18px', height: '18px', borderRadius: '50%',
-                  backgroundColor: 'rgba(201,168,76,0.15)', border: '1px solid rgba(201,168,76,0.4)',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
-                }}>
-                  <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
-                    <path d="M2 5l2 2 4-4" stroke="#C9A84C" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                  </svg>
-                </div>
-                <span style={{ fontSize: '0.82rem', color: 'rgba(255,255,255,0.75)', fontFamily: 'var(--font-ibm, sans-serif)', fontWeight: 500 }}>
-                  {item}
-                </span>
-              </div>
-            ))}
-          </div>
-        </motion.div>
       </div>
+
+      {/* 3-stat row at bottom */}
+      <motion.div
+        initial={reduced ? {} : { opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.8, delay: 0.7 }}
+        style={{
+          position: 'absolute',
+          bottom: 0,
+          left: 0,
+          right: 0,
+          zIndex: 1,
+          borderTop: '1px solid rgba(255,255,255,0.1)',
+          backgroundColor: 'rgba(10,23,37,0.5)',
+          backdropFilter: 'blur(8px)',
+        }}
+      >
+        <div style={{
+          maxWidth: '1280px',
+          margin: '0 auto',
+          padding: '1.25rem 1.5rem',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: '0',
+        }}>
+          {[
+            { label: '24hr', sub: 'Funding' },
+            { label: 'Curated Network', sub: 'of Private Lenders' },
+            { label: '$10K - $2M', sub: 'Funding Range' },
+          ].map((stat, i) => (
+            <div key={stat.label} style={{
+              display: 'flex',
+              alignItems: 'center',
+            }}>
+              {i > 0 && (
+                <div style={{
+                  width: '1px',
+                  height: '32px',
+                  backgroundColor: 'var(--gold)',
+                  opacity: 0.3,
+                  margin: '0 clamp(1.5rem, 4vw, 3.5rem)',
+                }} />
+              )}
+              <div style={{ textAlign: 'center' }}>
+                <div style={{
+                  fontFamily: 'var(--font-playfair, serif)',
+                  fontSize: 'clamp(16px, 2.2vw, 22px)',
+                  fontWeight: 600,
+                  color: '#FFFFFF',
+                  letterSpacing: '0.01em',
+                  lineHeight: 1.2,
+                }}>
+                  {stat.label}
+                </div>
+                <div style={{
+                  fontFamily: 'var(--font-mono), monospace',
+                  fontSize: '9px',
+                  color: 'rgba(255,255,255,0.45)',
+                  letterSpacing: '0.16em',
+                  textTransform: 'uppercase',
+                  marginTop: '4px',
+                }}>
+                  {stat.sub}
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </motion.div>
     </section>
   )
 }
