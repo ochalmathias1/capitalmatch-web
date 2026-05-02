@@ -62,10 +62,11 @@ export default function Step4Documents({ data, onChange, errors, uploadToken }: 
       // Duplicate check against live ref, not stale prop snapshot.
       if (namesRef.current.includes(file.name)) continue
 
-      // Two-step upload (file bytes never hit the Vercel function — they
-      // stream browser → Supabase Storage directly via a signed URL):
-      //   1. POST metadata to /api/upload-statement → receive signed upload URL
-      //   2. PUT file body to that URL with proper Content-Type
+      // Three-step upload (file bytes never hit the Vercel function — they
+      // stream browser → Supabase Storage directly):
+      //   1. POST init to /api/upload-statement → receive uploadUrl + path
+      //   2. PUT file body to uploadUrl with proper Content-Type
+      //   3. POST confirm to /api/upload-statement → receive signedUrl
       const sizeMB = (file.size / 1024 / 1024).toFixed(1)
 
       // Client-side guard so we can show a friendly error before the round-trip.
@@ -74,7 +75,7 @@ export default function Step4Documents({ data, onChange, errors, uploadToken }: 
         continue
       }
 
-      const requestSignedUrls = async (token: string) => {
+      const initRequest = async (token: string) => {
         return fetch('/api/upload-statement', {
           method:  'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -88,33 +89,35 @@ export default function Step4Documents({ data, onChange, errors, uploadToken }: 
       }
 
       try {
-        let res = await requestSignedUrls(uploadToken)
-        let json: { uploadUrl?: string; signedUrl?: string; path?: string; error?: string } =
-          await res.json().catch(() => ({}))
+        // ── Step 1: INIT ──────────────────────────────────────────────────
+        let token = uploadToken
+        let initRes = await initRequest(token)
+        let initJson: { uploadUrl?: string; path?: string; error?: string } =
+          await initRes.json().catch(() => ({}))
 
         // Auto-retry once on 401 (expired token) — refresh + resend
-        if (res.status === 401) {
+        if (initRes.status === 401) {
           try {
             const tokenRes  = await fetch('/api/upload-token')
             const tokenJson = await tokenRes.json()
             if (tokenJson.token) {
-              res  = await requestSignedUrls(tokenJson.token)
-              json = await res.json().catch(() => ({}))
+              token    = tokenJson.token
+              initRes  = await initRequest(token)
+              initJson = await initRes.json().catch(() => ({}))
             }
-          } catch { /* retry failed, fall through */ }
+          } catch { /* fall through */ }
         }
 
-        if (!res.ok || !json.uploadUrl || !json.signedUrl) {
-          const detail = json?.error ?? `HTTP ${res.status}`
-          console.error(`[upload] Sign step failed for ${file.name} (${sizeMB}MB, type=${file.type}):`, json)
+        if (!initRes.ok || !initJson.uploadUrl || !initJson.path) {
+          const detail = initJson?.error ?? `HTTP ${initRes.status}`
+          console.error(`[upload] Init failed for ${file.name} (${sizeMB}MB, type=${file.type}):`, initJson)
           setUploadError(`Failed to upload ${file.name}: ${detail}`)
           continue
         }
 
-        // PUT the file directly to Supabase Storage. The signed URL is
-        // pre-authorized, so we don't include any auth headers ourselves.
+        // ── Step 2: PUT file directly to Supabase Storage ─────────────────
         const putContentType = file.type || 'application/octet-stream'
-        const putRes = await fetch(json.uploadUrl, {
+        const putRes = await fetch(initJson.uploadUrl, {
           method:  'PUT',
           headers: { 'Content-Type': putContentType, 'x-upsert': 'false' },
           body:    file,
@@ -127,9 +130,25 @@ export default function Step4Documents({ data, onChange, errors, uploadToken }: 
           continue
         }
 
+        // ── Step 3: CONFIRM — fetch signed read URL now that the object exists ─
+        const confirmRes = await fetch('/api/upload-statement', {
+          method:  'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ uploadToken: token, path: initJson.path }),
+        })
+        const confirmJson: { signedUrl?: string; error?: string } =
+          await confirmRes.json().catch(() => ({}))
+
+        if (!confirmRes.ok || !confirmJson.signedUrl) {
+          const detail = confirmJson?.error ?? `HTTP ${confirmRes.status}`
+          console.error(`[upload] Confirm failed for ${file.name}:`, confirmJson)
+          setUploadError(`Upload completed but URL fetch failed: ${detail}. Please re-add the file.`)
+          continue
+        }
+
         // Update refs immediately so the next file in this loop sees the
         // accumulated result, not the stale snapshot from the original render.
-        urlsRef.current  = [...urlsRef.current,  json.signedUrl]
+        urlsRef.current  = [...urlsRef.current,  confirmJson.signedUrl]
         namesRef.current = [...namesRef.current, file.name]
         onChange('bankStatementUrls',  urlsRef.current)
         onChange('bankStatementNames', namesRef.current)
