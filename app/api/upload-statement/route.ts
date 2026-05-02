@@ -99,8 +99,11 @@ export async function POST(req: NextRequest) {
       .createSignedUploadUrl(path)
 
     if (signedUploadError || !signedUploadData?.signedUrl) {
-      console.error('[upload-statement] Signed upload URL error:', signedUploadError?.message)
-      return NextResponse.json({ error: 'Could not prepare upload. Please try again.' }, { status: 500 })
+      console.error('[upload-statement] Signed upload URL error:', signedUploadError)
+      return NextResponse.json(
+        { error: 'Could not prepare upload (sign-upload).', detail: signedUploadError?.message || 'unknown' },
+        { status: 500 },
+      )
     }
 
     // 1-hour signed read URL — long enough for the merchant to finish the
@@ -111,8 +114,11 @@ export async function POST(req: NextRequest) {
       .createSignedUrl(path, 60 * 60)
 
     if (signedReadError || !signedReadData?.signedUrl) {
-      console.error('[upload-statement] Signed read URL error:', signedReadError?.message)
-      return NextResponse.json({ error: 'Could not prepare upload. Please try again.' }, { status: 500 })
+      console.error('[upload-statement] Signed read URL error:', signedReadError)
+      return NextResponse.json(
+        { error: 'Could not prepare upload (sign-read).', detail: signedReadError?.message || 'unknown' },
+        { status: 500 },
+      )
     }
 
     return NextResponse.json({
