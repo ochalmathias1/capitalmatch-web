@@ -62,50 +62,77 @@ export default function Step4Documents({ data, onChange, errors, uploadToken }: 
       // Duplicate check against live ref, not stale prop snapshot.
       if (namesRef.current.includes(file.name)) continue
 
+      // Two-step upload (file bytes never hit the Vercel function — they
+      // stream browser → Supabase Storage directly via a signed URL):
+      //   1. POST metadata to /api/upload-statement → receive signed upload URL
+      //   2. PUT file body to that URL with proper Content-Type
+      const sizeMB = (file.size / 1024 / 1024).toFixed(1)
+
+      // Client-side guard so we can show a friendly error before the round-trip.
+      if (file.size > 25 * 1024 * 1024) {
+        setUploadError(`${file.name} is too large (${sizeMB}MB). Maximum file size is 25MB.`)
+        continue
+      }
+
+      const requestSignedUrls = async (token: string) => {
+        return fetch('/api/upload-statement', {
+          method:  'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            uploadToken: token,
+            filename:    file.name,
+            contentType: file.type || 'application/octet-stream',
+            size:        file.size,
+          }),
+        })
+      }
+
       try {
-        const form = new FormData()
-        form.append('file', file)
-        if (uploadToken) form.append('uploadToken', uploadToken)
+        let res = await requestSignedUrls(uploadToken)
+        let json: { uploadUrl?: string; signedUrl?: string; path?: string; error?: string } =
+          await res.json().catch(() => ({}))
 
-        let res = await fetch('/api/upload-statement', { method: 'POST', body: form })
-        let json = await res.json()
-
-        // Auto-retry once on 401 (expired token) — fetch fresh token and resend
+        // Auto-retry once on 401 (expired token) — refresh + resend
         if (res.status === 401) {
           try {
-            const tokenRes = await fetch('/api/upload-token')
+            const tokenRes  = await fetch('/api/upload-token')
             const tokenJson = await tokenRes.json()
             if (tokenJson.token) {
-              const retryForm = new FormData()
-              retryForm.append('file', file)
-              retryForm.append('uploadToken', tokenJson.token)
-              res = await fetch('/api/upload-statement', { method: 'POST', body: retryForm })
-              json = await res.json()
+              res  = await requestSignedUrls(tokenJson.token)
+              json = await res.json().catch(() => ({}))
             }
-          } catch { /* retry failed, fall through to error handling */ }
+          } catch { /* retry failed, fall through */ }
         }
 
-        if (!res.ok) {
+        if (!res.ok || !json.uploadUrl || !json.signedUrl) {
           const detail = json?.error ?? `HTTP ${res.status}`
-          const sizeMB = (file.size / 1024 / 1024).toFixed(1)
-          console.error(`[upload] Failed for ${file.name} (${sizeMB}MB, type=${file.type}):`, json)
-          if (file.size > 10 * 1024 * 1024) {
-            setUploadError(`${file.name} is too large (${sizeMB}MB). Maximum file size is 10MB.`)
-          } else {
-            setUploadError(`Failed to upload ${file.name}: ${detail}`)
-          }
+          console.error(`[upload] Sign step failed for ${file.name} (${sizeMB}MB, type=${file.type}):`, json)
+          setUploadError(`Failed to upload ${file.name}: ${detail}`)
           continue
         }
 
-        if (json.signedUrl) {
-          // Update refs immediately so the next file in this loop sees the
-          // accumulated result, not the stale snapshot from the original render.
-          urlsRef.current  = [...urlsRef.current,  json.signedUrl]
-          namesRef.current = [...namesRef.current, file.name]
-          // Notify parent after each successful file so the UI updates live.
-          onChange('bankStatementUrls',  urlsRef.current)
-          onChange('bankStatementNames', namesRef.current)
+        // PUT the file directly to Supabase Storage. The signed URL is
+        // pre-authorized, so we don't include any auth headers ourselves.
+        const putContentType = file.type || 'application/octet-stream'
+        const putRes = await fetch(json.uploadUrl, {
+          method:  'PUT',
+          headers: { 'Content-Type': putContentType, 'x-upsert': 'false' },
+          body:    file,
+        })
+
+        if (!putRes.ok) {
+          const detail = await putRes.text().catch(() => '')
+          console.error(`[upload] Direct PUT failed for ${file.name} (${sizeMB}MB):`, putRes.status, detail.slice(0, 200))
+          setUploadError(`Failed to upload ${file.name}. Please try again.`)
+          continue
         }
+
+        // Update refs immediately so the next file in this loop sees the
+        // accumulated result, not the stale snapshot from the original render.
+        urlsRef.current  = [...urlsRef.current,  json.signedUrl]
+        namesRef.current = [...namesRef.current, file.name]
+        onChange('bankStatementUrls',  urlsRef.current)
+        onChange('bankStatementNames', namesRef.current)
       } catch (err) {
         console.error(`[upload] Network error for ${file.name}:`, err)
         setUploadError(`Failed to upload ${file.name}. Check your connection and try again.`)
